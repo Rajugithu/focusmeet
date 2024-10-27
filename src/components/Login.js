@@ -12,7 +12,7 @@ const Login = () => {
         e.preventDefault();
     
         try {
-            await axios.post('http://localhost:5000/login', { email, password });
+            await axios.post('http://localhost:5000/api/login', { email, password });
             setRedirect(true); 
         } catch (error) {
             setError('Invalid email or password');

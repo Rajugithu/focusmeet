@@ -4,6 +4,9 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Navbar from './components/Navbar'; 
 import Profile from './components/profile';
+import About  from './components/About';
+import FeedBack from './components/feedback';
+
 
 function App() {
     return (
@@ -14,8 +17,18 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/about" element={<About/>} />
+                <Route path="/contact" element={<FeedBack/>}/>
             </Routes>
         </Router>
+
+    );
+
+    return(
+        <div className='Grid_Container'>
+            dis
+            
+        </div>
     );
 }
 

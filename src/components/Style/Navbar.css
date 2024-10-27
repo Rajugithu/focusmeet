@@ -1,16 +1,17 @@
 body{
-    background-color: #2d3236;
+    background-color: #aaacad;
 }
 .navbar {
-    background-color: #333;
+    background-color: #4d4b4b;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
+    border-radius: 12px;
 }
 
 .logo h1 {
-    color: white;
+    color: rgb(5, 4, 4);
     font-size: 24px;
     margin: 0;
 }
@@ -26,7 +27,7 @@ body{
 }
 
 .navLinks a {
-    color: white;
+    color: rgb(5, 4, 4);
     text-decoration: none;
     font-size: 19px;
 }
@@ -44,13 +45,56 @@ body{
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    
 }
 
 .signup-btn:hover, .login-btn:hover {
-    background-color: #0056b3;
+    background-color: #5e758d;
 }
+
+
+.Grid_Container {
+    display: flex;
+
+    justify-content: center;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    gap: 10px; /* This sets equal space between both rows and columns */
+    padding: 16px;  
+}
+
+.large-div {
+    position: relative; 
+    width: 400px; 
+    height: 400px; 
+    background-color: #f0f0f0; 
+    border-radius: 50%; 
+    overflow: hidden;
+    background-color: #4d4b4b;
+    margin-right: 40px;
+}
+
+.small-div-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px; /* Same gap for both rows and columns */
+    background-color: #4d4b4b;
+}
+
+.small-div {
+    width: 350px; 
+    background-color: #e0e0e0; 
+    border-radius: 8px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+

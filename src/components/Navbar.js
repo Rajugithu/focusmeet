@@ -11,8 +11,7 @@ const Navbar = () => {
             <ul className='navLinks'>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/about">About</Link></li>
-                <li><Link to="/contact">Contact</Link></li>
-                <li><Link to="/dashboard">Dashboard</Link></li>
+                <li><Link to="/contact">Feed Back</Link></li>
             </ul>
 
             <div className='auth-buttons'>

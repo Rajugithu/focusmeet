@@ -4,7 +4,7 @@ import './Style/Form.css';  // Assuming you have a CSS file for styling
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
   });
@@ -23,7 +23,7 @@ const SignUp = () => {
   // Validate the form before submission
   const validateForm = () => {
     let formErrors = {};
-    if (!formData.name) formErrors.name = 'Name is required';
+    if (!formData.username) formErrors.username = 'Username is required'; // Fixed typo
     if (!formData.email) formErrors.email = 'Email is required';
     if (!formData.password) formErrors.password = 'Password is required';
     return formErrors;
@@ -45,13 +45,13 @@ const SignUp = () => {
 
     try {
       // Make a POST request to the signup API endpoint
-      const response = await axios.post('http://localhost:5000/signup', formData);
+      const response = await axios.post('http://localhost:5000/api/SignUp', formData);
       
       console.log(response.data); // Log the response from the server
 
       // If successful, set the success message and clear the form
       setSuccess('User registered successfully!');
-      setFormData({ name: '', email: '', password: '' }); // Clear the form
+      setFormData({ username: '', email: '', password: '' }); // Clear the form
       setErrors({});  // Clear any previous errors
     } catch (error) {
       if (error.response) {
@@ -77,15 +77,15 @@ const SignUp = () => {
       {errors.server && <p className="error">{errors.server}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Name:</label>
+          <label htmlFor="username">Username:</label> {/* Updated to match id */}
           <input
             type="text"
-            id="name"
-            name="name"
-            value={formData.name}
+            id="username"
+            name="username"
+            value={formData.username}
             onChange={handleChange}
           />
-          {errors.name && <p className="error">{errors.name}</p>}
+          {errors.username && <p className="error">{errors.username}</p>} {/* Fixed error reference */}
         </div>
 
         <div className="form-group">
