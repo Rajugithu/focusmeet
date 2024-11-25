@@ -1,0 +1,62 @@
+/* Overall container for profile page */
+.profile-page {
+    display: flex;
+    min-height: 100vh; /* Ensure full height of the page */
+    flex-direction: row; /* Arrange Sidebar and Content horizontally */
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+/* Sidebar styles */
+.sidebar {
+    position: fixed; /* Make sidebar fixed on the left */
+    top: 0;
+    left: 0;
+    width: 250px; /* Adjust width of the sidebar */
+    height: 100vh; /* Full height of the page */
+    background-color: #333; /* Dark background for sidebar */
+    padding-top: 60px; /* Add some top padding to make space for navbar */
+}
+
+/* Profile content (next to the sidebar) */
+.profile-content {
+    margin-left: 250px; /* Space for the sidebar */
+    padding: 20px;
+    flex-grow: 1; /* Content takes the rest of the available space */
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #4d4b4b;
+    position: fixed; /* Fix navbar on top */
+    width: 100%; /* Full width */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Make sure navbar is above other elements */
+    padding: 10px 20px;
+    border-radius: 12px;
+}
+
+/* Adjust profile content for space below the navbar */
+.profile-content {
+    margin-top: 60px; /* Add top margin to prevent overlap with the navbar */
+    padding: 20px;
+}
+
+/* Profile circle inside profile content */
+.profile-circle {
+    width: 40px;
+    height: 40px;
+    background-color: #ddd;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
