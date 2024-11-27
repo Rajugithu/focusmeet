@@ -1,11 +1,18 @@
 /* Base styles remain the same */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
 .landing-container {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-image: url('LandingPage2.jpeg'); /* Path is correct */
-    background-size: cover;
+    width: 100vw;
+    /* background-image: url('LandingPage2.jpeg'); */
+    background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;
     overflow: hidden;
@@ -47,8 +54,8 @@ h1 {
 .btn {
     padding: 12px 20px;
     font-size: 18px;
-    color: white;
-    background-color: #007bff;
+    color: black;
+    background-color: #43e3e2;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -57,7 +64,8 @@ h1 {
 
 /* Button hover effect */
 .btn:hover {
-    background-color: #0056b3;
+    background-color: #4bfafa;
+    font-weight: bold;
 }
 
 /* Optional: styling for image (if you plan to use it) */
