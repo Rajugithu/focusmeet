@@ -4,32 +4,56 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Navbar from './components/Navbar'; 
 import Profile from './components/profile';
-import About  from './components/About';
+import About from './components/About';
 import FeedBack from './components/feedback';
-
+import LandingPage from './components/LandingPage';
 
 function App() {
+    // Assume isLoggedIn state is managed here
+    const isLoggedIn = false; // Change this dynamically based on actual login state
+
     return (
         <Router>
-            <Navbar />  {/* This ensures the Navbar is visible */}
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/about" element={<About/>} />
-                <Route path="/contact" element={<FeedBack/>}/>
+                {/* Landing Page route does not need Navbar */}
+                <Route path="/" element={<LandingPage />} />
+
+                {/* Routes with Navbar */}
+                <Route path="/signup" element={
+                    <>
+                        <Navbar isLoggedIn={isLoggedIn} />
+                        <SignUp />
+                    </>
+                } />
+
+                <Route path="/login" element={
+                    <>
+                        <Navbar isLoggedIn={isLoggedIn} />
+                        <Login />
+                    </>
+                } />
+                
+                <Route path="/home" element={
+                    <>
+                        <Navbar isLoggedIn={isLoggedIn} />
+                        <Home />
+                    </>
+                } />
+                
+                {/* Profile Route with Navbar */}
+                <Route path="/profile" element={
+                    <>
+                        <Navbar isLoggedIn={isLoggedIn} />
+                        <Profile />
+                    </>
+                } />
+
+                {/* About and Feedback Routes */}
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<FeedBack />} />
             </Routes>
         </Router>
-
-    );
-
-    return(
-        <div className='Grid_Container'>
-            dis
-            
-        </div>
-    );
+    ); 
 }
 
 export default App;
