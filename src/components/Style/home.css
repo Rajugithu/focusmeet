@@ -1,157 +1,127 @@
-/* Container for the page */
-.home-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #b2b2b4; /* Background color */
-    /* Or use a background gradient or image */
-    background: linear-gradient(135deg, #f3f4f6, #e4e6e9); /* Example gradient */
-    /* background-image: url('path/to/image.jpg'); */
-    /* background-size: cover; */
-    /* background-position: center; */
-}
-
-/* Centered box */
-.center-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 60%;
-    max-width: 800px;
-    background: rgb(218, 210, 210);
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
-/* Left Section: Details */
-.details-section {
-    flex: 1;
-    padding: 30px;
-    background-color: lightgray;
-    color: black;
-    text-align: left;
-}
-
-.details-section h2 {
-    margin-bottom: 15px;
-    font-size: 24px;
-}
-
-.details-section p {
-    line-height: 1.6;
-    font-size: 16px;
-}
-
-/* Right Section: Login Form */
-.login-section {
-    flex: 1;
-    padding: 30px;
-}
-
-.login-section h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
-}
-
-/* Form styling */
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    outline: none;
-}
-
-.form-group input:focus {
-    border-color: #007bff;
-}
-
-/* Login button */
-.btn-login {
-    width: 100%;
-    padding: 12px;
-    font-size: 18px;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn-login:hover {
-    background-color: #0056b3;
-    transform: scale(1.05); /* Slight scaling effect */
-}
-
-/* Style for the "Continue with Google" heading */
-.google-login {
-    margin-top: 15px;
-    font-size: 16px;
-    color: #555;
-    text-align: center;
-    cursor: pointer;
-    text-decoration: underline;
-    transition: color 0.3s ease;
-}
-
-.google-login:hover {
-    color: #007bff;
-}
-
-/* Media query for small screens (e.g., mobile devices) */
-@media (max-width: 768px) {
-    .center-box {
-        flex-direction: column; /* Stack sections vertically */
-        width: 90%; /* Allow more space on smaller screens */
-    }
-
-    .details-section, .login-section {
-        padding: 20px;
-    }
-
-    .details-section h2, .login-section h2 {
-        font-size: 20px; /* Slightly smaller text */
-    }
-
-    .btn-login {
-        font-size: 16px; /* Smaller button text */
-        padding: 10px; /* Reduce padding */
-    }
-
-    .google-login {
-        font-size: 14px; /* Smaller text for Google login */
-    }
-}
-
-/* Adjust for smaller screens (mobile) */
-@media (max-width: 480px) {
+    /* General container styling */
     .home-container {
-        padding: 10px; /* Add some padding around the container */
+        display: flex;
+        margin-top: 100px;
+        flex-direction: column;
+        align-items: center; /* Aligns content inside to the right */
+        justify-content: center;
+        min-height: 100vh;
+        width: 90vw; /* Ensure this value is as needed */
+        margin-right: 0; /* Pushes the container to the right */
+        box-sizing: border-box;
     }
 
-    .center-box {
-        flex-direction: column; /* Stack sections vertically */
-        width: 100%; /* Make the center-box take full width */
+    /* Layout for the home page content */
+    .home-layout {
+        display: flex;
+        flex: 1; /* Ensure this layout takes the full height */
+        width: 100%;
+        margin-left: 100px;
+        justify-content: right;
+
     }
 
-    .details-section, .login-section {
+    /* Sidebar styling */
+    .sidebar {
+        width: 250px; /* Fixed width for the sidebar */
         padding: 20px;
-        text-align: center; /* Center-align text for better look on small screens */
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background-color: #f4f4f4;
+        height: 100vh; /* Sidebar should take the full height of the screen */
     }
-}
+
+    /* Main Content Container */
+    .main-content {
+        flex-grow: 1; 
+        width: 100% !important; 
+        display: flex;
+        flex-direction: column; 
+        justify-content: flex-start; 
+        align-items: center; 
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        margin-left: 130px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Welcome text styling */
+    .welcome-text {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* Create Meeting button styling */
+    .create-meeting-btn {
+        padding: 12px 24px;
+        font-size: 20px;
+        max-width: 350px;
+        font-weight: bold;
+        color: #333;
+        background-color: #43e3e2;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .create-meeting-btn:hover {
+        background-color: #43e3e2;
+        transform: scale(1.05);
+    }
+
+    /* Course Grid Container */
+    .course-grid {
+        display: grid;
+        margin-right: 0px;
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+        gap: 20px;
+        width: 100%;
+        margin-top: 20px;
+    }   
+    /* Single Course Box */
+    .course-box {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .course-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Course Image */
+    .course-box img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* Course Title */
+    .course-box h3 {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-top: 15px;
+    }
+
+    /* Navbar styling */
+    .navbar {
+        width: 100%;
+        background-color: #43e3e2;
+        padding: 10px 20px;
+        color: black;
+        font-size: 18px;
+        text-align: center;
+        border-radius: 5px;
+    }

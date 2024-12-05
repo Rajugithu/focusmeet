@@ -7,11 +7,13 @@ html, body {
 
 .landing-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center; */
+    /* justify-content: center; */
+    align-items: end;
     height: 100vh;
     width: 100vw;
     /* background-image: url('LandingPage2.jpeg'); */
+    background-image: url('FOCUS\ MEET.png');
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;
@@ -22,7 +24,8 @@ html, body {
 /* Content section styling */
 .content {
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.6); /* Overlay for better text visibility */
+    margin-left: 20px;
+    /* background-color: rgba(0, 0, 0, 0.6);  */
     padding: 20px;
     border-radius: 8px;
     color: white;
@@ -47,13 +50,17 @@ h1 {
     display: flex;
     gap: 15px;
     justify-content: center;
-    margin-top: 20px; /* Space between the buttons and content */
+    margin-top: 20px;
 }
 
 /* Button styling */
 .btn {
     padding: 12px 20px;
-    font-size: 18px;
+    height: 95px;
+    width: 225px;
+    font-size: 28px; 
+    margin-left: 110px;
+    margin-bottom: 300px;   
     color: black;
     background-color: #43e3e2;
     border: none;
@@ -70,17 +77,20 @@ h1 {
 
 /* Optional: styling for image (if you plan to use it) */
 .landing-image {
-    width: 100%; /* Adjust the width as needed */
-    max-width: 600px; /* Limit the max width */
+    width: 100%; 
+    max-width: 600px; 
     margin-top: 20px;
-    border-radius: 10px; /* Optional: for rounded corners */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Optional: to add some shadow */
+    border-radius: 10px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
 }
 
 /* Add any additional styles you need for responsiveness, etc. */
 @media screen and (max-width: 768px) {
     h1 {
         font-size: 2.5rem; /* Adjust heading size on smaller screens */
+    }
+    .landing-image {
+        display: none; /* Hides the image on screens 768px or smaller */
     }
 
     .btn {

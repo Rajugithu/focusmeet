@@ -1,45 +1,45 @@
 /* Overall container for profile page */
 .profile-page {
     display: flex;
-    min-height: 100vh; /* Ensure full height of the page */
-    flex-direction: row; /* Arrange Sidebar and Content horizontally */
+    min-height: 100vh; 
+    flex-direction: row; 
     justify-content: flex-start;
     align-items: flex-start;
 }
 
 /* Sidebar styles */
 .sidebar {
-    position: fixed; /* Make sidebar fixed on the left */
+    position: fixed; 
     top: 0;
     left: 0;
-    width: 250px; /* Adjust width of the sidebar */
-    height: 100vh; /* Full height of the page */
-    background-color: #333; /* Dark background for sidebar */
-    padding-top: 60px; /* Add some top padding to make space for navbar */
+    width: 250px; 
+    height: 100vh; 
+    background-color: #333;
+    padding-top: 60px;
 }
 
 /* Profile content (next to the sidebar) */
 .profile-content {
-    margin-left: 250px; /* Space for the sidebar */
+    margin-left: 250px;
     padding: 20px;
-    flex-grow: 1; /* Content takes the rest of the available space */
+    flex-grow: 1;
 }
 
 /* Navbar Styling */
 .navbar {
     background-color: #4d4b4b;
-    position: fixed; /* Fix navbar on top */
-    width: 100%; /* Full width */
+    position: fixed;
+    width: 100%;
     top: 0;
     left: 0;
-    z-index: 1000; /* Make sure navbar is above other elements */
+    z-index: 1000;
     padding: 10px 20px;
     border-radius: 12px;
 }
 
 /* Adjust profile content for space below the navbar */
 .profile-content {
-    margin-top: 60px; /* Add top margin to prevent overlap with the navbar */
+    margin-top: 60px; 
     padding: 20px;
 }
 

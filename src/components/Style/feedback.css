@@ -1,0 +1,127 @@
+/* Full-screen container styling */
+.feedback-container {
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #f0f8ff, #f0f8ff); /* Subtle gradient background */
+    height: 100vh; /* Full screen height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Title styling */
+.welcome-text {
+    font-size: 36px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: black;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Styling for the feedback form */
+.feedback-form {
+    width: 80%;
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: #f0f8ff;
+    padding: 30px 40px; 
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.feedback-form:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Form group styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Label styling */
+.form-group label {
+    font-size: 16px;
+    color: #555;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+/* Input and textarea styling */
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #4CAF50;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+/* Submit button styling */
+.submit-button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease-in-out;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+.submit-button:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(72, 202, 128, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .feedback-form {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .welcome-text {
+        font-size: 28px;
+    }
+}
+
+/* Styling for Rating */
+.rating-label {
+    margin-right: 10px;
+    font-size: 18px;
+    color: #555;
+}
+
+.rating-label input {
+    margin-right: 5px;
+}
+
+/* Checkbox styling */
+.form-group label input[type="checkbox"] {
+    margin-right: 10px;
+}

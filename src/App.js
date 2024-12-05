@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LandingPage from './components/LandingPage';
 import Home from './components/home';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
@@ -6,7 +7,7 @@ import Navbar from './components/Navbar';
 import Profile from './components/profile';
 import About from './components/About';
 import FeedBack from './components/feedback';
-import LandingPage from './components/LandingPage';
+
 
 function App() {
     // Assume isLoggedIn state is managed here

@@ -11,19 +11,15 @@ function LandingPage() {
 
     setTimeout(() => {
       navigate(path);
-    }, 800); // Allow animation time
+    }, 800); 
   };
 
   return (
     <div className="landing-container">
       <div className={`content ${moveUp ? 'move-up' : ''}`}>
-        {/* <h1>Welcome to FocusMeet</h1> */}
         <div className="button-group">
-          <button className="btn" onClick={() => handleTransition('/signup')}>
-            Login as a Teacher
-          </button>
-          <button className="btn" onClick={() => handleTransition('/signup')}>
-            Login as a Student
+          <button className="btn" onClick={() => handleTransition('/about')}>
+            Get Started
           </button>
         </div>
       </div>
