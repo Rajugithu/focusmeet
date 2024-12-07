@@ -47,11 +47,11 @@
     .sidebar {
         width: 100%; /* Sidebar takes full width on small screens */
         height: auto; /* Allow sidebar height to adjust based on content */
-        margin-top: 50px; /* Adjust the top margin */
+        margin-top: 50px; 
     }
 
     .sidebar-btn {
-        padding: 10px; /* Reduce padding for smaller screens */
-        font-size: 14px; /* Smaller button text */
+        padding: 10px; 
+        font-size: 14px; 
     }
 }
