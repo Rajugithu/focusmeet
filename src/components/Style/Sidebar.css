@@ -4,16 +4,17 @@
     top: 0;
     left: 0;
     width: 250px;
-    height: 80%;
+    height: 100%; /* Full height of the screen */
     background-color: #333;
     color: white;
     padding-top: 50px; /* Add space from the top */
     border-radius: 5px; /* Optional: rounded corners for modern look */
     margin-top: 80px;
     margin-bottom: 30px;
+    transition: transform 0.3s ease-in-out;
 }
 
-
+/* Sidebar button */
 .sidebar-btn {
     width: 100%;
     padding: 15px;
@@ -29,4 +30,28 @@
 
 .sidebar-btn:hover {
     background-color: #5e758d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px; /* Reduce the sidebar width */
+    }
+
+    .sidebar-btn {
+        font-size: 16px; /* Make the button text smaller */
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%; /* Sidebar takes full width on small screens */
+        height: auto; /* Allow sidebar height to adjust based on content */
+        margin-top: 50px; /* Adjust the top margin */
+    }
+
+    .sidebar-btn {
+        padding: 10px; /* Reduce padding for smaller screens */
+        font-size: 14px; /* Smaller button text */
+    }
 }
