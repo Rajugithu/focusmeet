@@ -32,7 +32,7 @@ const Login = () => {
     };
 
     if (isLoggedIn) {
-        return <Navigate to="/profile" />;
+        return <Navigate to="/home" />;
     }
 
     return (
