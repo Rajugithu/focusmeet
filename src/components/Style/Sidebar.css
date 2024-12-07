@@ -45,8 +45,8 @@
 
 @media (max-width: 480px) {
     .sidebar {
-        width: 100%; /* Sidebar takes full width on small screens */
-        height: auto; /* Allow sidebar height to adjust based on content */
+        width: 100%; 
+        height: auto; 
         margin-top: 50px; 
     }
 
