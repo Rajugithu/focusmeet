@@ -1,0 +1,195 @@
+/* Basic body and global styles */
+body {
+  background-color: #f3f3f3;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Container for the sign-up form */
+.signup-container {
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  flex-wrap: wrap;  /* This will allow the form and info section to stack on smaller screens */
+}
+
+/* Info section styles */
+.info-section {
+  flex: 1;
+  background-color: rgb(13, 26, 49) !important;
+  color: black !important;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-section h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.info-section p {
+  font-size: 16px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Form section styles */
+.form-section {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Form input styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Button styles */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3eeeee;
+}
+
+/* Error and success message styles */
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.success {
+  color: green;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Media Queries for responsiveness */
+
+/* For Tablets */
+@media screen and (max-width: 768px) {
+  .signup-container {
+    flex-direction: column;  /* Stack the form and info section */
+  }
+
+  .info-section {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .form-section {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .info-section h2 {
+    font-size: 22px;
+  }
+
+  .info-section p {
+    font-size: 14px;
+  }
+
+  .form-section h2 {
+    font-size: 20px;
+  }
+
+  input {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* For Mobile Devices */
+@media screen and (max-width: 480px) {
+  .info-section {
+    padding: 15px;
+  }
+
+  .form-section {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .info-section h2 {
+    font-size: 20px;
+  }
+
+  .info-section p {
+    font-size: 12px;
+  }
+
+  .form-section h2 {
+    font-size: 18px;
+  }
+
+  input {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .error, .success {
+    font-size: 12px;
+  }
+}
