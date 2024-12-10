@@ -26,7 +26,7 @@ body {
 /* Info section styles */
 .info-section {
   flex: 1;
-  background-color: #43e3e2 !important;
+  background-color: rgb(13, 26, 49) !important;
   color: black !important;
   padding: 30px;
   display: flex;

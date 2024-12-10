@@ -4,16 +4,22 @@
     top: 0;
     left: 0;
     width: 250px;
+<<<<<<< HEAD
     height: 80%;
     background-color: #3d8686 !important;
+=======
+    height: 100%; /* Full height of the screen */
+    background-color: #333;
+>>>>>>> 16cf3a07a9784a5bece56fcf3b884e573e9e9752
     color: white;
     padding-top: 50px; 
     border-radius: 5px;
     margin-top: 80px;
     margin-bottom: 30px;
+    transition: transform 0.3s ease-in-out;
 }
 
-
+/* Sidebar button */
 .sidebar-btn {
     width: 100%;
     padding: 15px;
@@ -29,4 +35,28 @@
 
 .sidebar-btn:hover {
     background-color: #3c9e9e;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px; /* Reduce the sidebar width */
+    }
+
+    .sidebar-btn {
+        font-size: 16px; /* Make the button text smaller */
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%; 
+        height: auto; 
+        margin-top: 50px; 
+    }
+
+    .sidebar-btn {
+        padding: 10px; 
+        font-size: 14px; 
+    }
 }
