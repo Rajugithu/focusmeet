@@ -4,13 +4,8 @@
     top: 0;
     left: 0;
     width: 250px;
-<<<<<<< HEAD
-    height: 80%;
-    background-color: #3d8686 !important;
-=======
     height: 100%; /* Full height of the screen */
-    background-color: #333;
->>>>>>> 16cf3a07a9784a5bece56fcf3b884e573e9e9752
+    background-color: #3d8686 !important; /* Adjusted to match the preferred color */
     color: white;
     padding-top: 50px; 
     border-radius: 5px;
