@@ -4,27 +4,32 @@ body {
 }
 
 .navbar {
-    background-color: #43e3e2 !important;
+    background-color: #092154 !important;
     display: flex;
-    color: black !important;
+    color: color;
     margin-top: 6px;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 15px;  
-    border-radius: 10px; 
-    font-size: 20px;
+    padding: 5px 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    height: 70px;
+    flex-wrap: wrap;
 }
 
+/* Logo */
 .logo h1 {
-    color: rgb(5, 4, 4);
-    font-size: 27px; /* Slightly smaller font size */
+    color: rgb(235, 234, 234);
+    font-size: 27px;
     margin: 0;
 }
 
+/* Navigation Links */
 .navLinks {
     list-style: none;
     display: flex;
-    gap: 15px; /* Reduced gap between links */
+    gap: 20px;
+    margin: 20px;
 }
 
 .navLinks li {
@@ -32,21 +37,22 @@ body {
 }
 
 .navLinks a {
-    color: rgb(5, 4, 4);
+    color: white;
     text-decoration: none;
-    font-size: 25px; /* Reduced font size */
+    font-size: 25px;
 }
 
 .navLinks a:hover {
     color: #ddd;
 }
 
+/* Auth Buttons */
 .auth-buttons {
     margin-left: auto;
 }
 
 .profile-circle {
-    width: 35px; /* Slightly smaller circle */
+    width: 35px;
     height: 35px;
     background-color: #ddd;
     border-radius: 50%;
@@ -63,11 +69,11 @@ body {
 }
 
 .signup-btn, .login-btn {
-    margin-left: 10px;  /* Reduced margin */
-    padding: 8px 16px;  /* Reduced padding */
-    font-size: 21px; /* Reduced font size */
+    margin-left: 10px;
+    padding: 8px 16px;
+    font-size: 21px;
     cursor: pointer;
-    color: black;
+    color: white;
     border: none;
     border-radius: 5px;
     margin-right: 25px;
@@ -76,7 +82,21 @@ body {
 }
 
 .signup-btn:hover, .login-btn:hover {
-    background-color: #37f3f3;
+    background-color: #183675;
+}
+
+/* Hamburger Menu */
+.hamburger-menu {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hamburger-menu .bar {
+    width: 30px;
+    height: 3px;
+    background-color: #EAEDEC;
 }
 
 /* Grid styling */
@@ -92,7 +112,7 @@ body {
     position: relative;
     width: 400px;
     height: 400px;
-    background-color: #f0f0f0;
+    background-color: #EAEDEC;
     border-radius: 50%;
     overflow: hidden;
     margin-right: 40px;
@@ -102,7 +122,7 @@ body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    background-color: #4d4b4b;
+    background-color: #EAEDEC;
 }
 
 .small-div {
@@ -118,21 +138,81 @@ body {
     align-items: center;
 }
 
-.profile-circle {
-    width: 40px; /* Size of the circle */
-    height: 40px;
-    background-color: #ddd; /* Fallback background color */
-    border-radius: 50%; /* Make it circular */
-    overflow: hidden; /* Ensure image fits within the circle */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 40px; /* Adds 50px margin on the left side */
+/* Responsive design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 10px;
+        height: auto;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    /* Move hamburger menu to the left */
+    .hamburger-menu {
+        display: flex; 
+        position: absolute;
+        left: 15px;
+        top: 15px;
+    }
+
+    .logo h1 {
+        margin-left: 35px; 
+    }
+
+    /* Navigation Links */
+    .navLinks {
+        flex-direction: column;
+        gap: 10px;
+        margin: 0;
+        align-items: flex-start;
+        display: none; 
+        width: 100%;
+        background-color: #EAEDEC; 
+        padding: 10px 0;
+    }
+
+    .navLinks.active {
+        display: flex; 
+    }
+
+    .navLinks a {
+        font-size: 18px;
+    }
+
+    .signup-btn, .login-btn {
+        padding: 6px 12px;
+        font-size: 18px;
+        margin-right: 10px;
+    }
+
+    .profile-circle {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+    }
 }
 
-.profile-circle img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-}
+@media (max-width: 480px) {
+    .navLinks {
+        gap: 5px;
+    }
 
+    .navLinks a {
+        font-size: 16px;
+    }
+
+    .signup-btn, .login-btn {
+        padding: 4px 10px;
+        font-size: 16px;
+    }
+
+    .logo h1 {
+        font-size: 20px;
+    }
+
+    .profile-circle {
+        width: 25px;
+        height: 25px;
+    }
+}
