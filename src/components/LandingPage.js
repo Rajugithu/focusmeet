@@ -77,7 +77,6 @@ function LandingPage() {
         </div>
       </div>
 
-      {/* Team Information */}
       <div className="team-section">
         <h2>Meet the Team</h2>
         <div className="team-members">
@@ -94,14 +93,55 @@ function LandingPage() {
             <p>hassanakmal420@gmail.com</p>
           </div>
         </div>
+
+        {/* Contact Us Button */}
+        <div className="contact-us">
+          <button className="btn" onClick={() => handleTransition('/contact')}>
+            Contact Us
+          </button>
+        </div>
       </div>
 
-      {/* Footer */}
-      <footer>
-        <button className="btn" onClick={() => handleTransition('/contact')}>
-          Contact Us
-        </button>
+
+      <footer className="footer">
+        <div className="footer-container">
+          <div className="footer-section">
+            <h5>Contact Us</h5>
+            <ul>
+              <li><a href="#">Questions? Contact Us</a></li>
+            </ul>
+          </div>
+          <div className="footer-section">
+            <h5>Quick Links</h5>
+            <ul>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">About Us</a></li>
+            </ul>
+          </div>
+          <div className="footer-section">
+            <h5>Resources</h5>
+            <ul>
+              <li><a href="#">Courses</a></li>
+              <li><a href="#">Certifications</a></li>
+              <li><a href="#">Learning Paths</a></li>
+            </ul>
+          </div>
+          <div className="footer-section">
+            <h5>Legal</h5>
+            <ul>
+              <li><a href="#">Terms of Use</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Cookie Preferences</a></li>
+            </ul>
+          </div>
+        </div>
+        <hr />
+        <div className="footer-bottom">
+          <p>© 2024 Your Online Learning Platform. All Rights Reserved.</p>
+        </div>
       </footer>
+
     </div>
   );
 }
