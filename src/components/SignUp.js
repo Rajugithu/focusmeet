@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google';  // Import GoogleLogin
+import { GoogleLogin } from '@react-oauth/google';  
 import './Style/Form.css';
 import Navbar from './Navbar';
 
@@ -9,6 +9,7 @@ const SignUp = () => {
     username: '',
     email: '',
     password: '',
+    userType: 'Student', // Default to Student
   });
 
   const [errors, setErrors] = useState({});
@@ -41,7 +42,7 @@ const SignUp = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/SignUp', formData);
       setSuccess('User registered successfully!');
-      setFormData({ username: '', email: '', password: '' });
+      setFormData({ username: '', email: '', password: '', userType: 'Student' });
       setErrors({});
     } catch (error) {
       setErrors({ server: 'Failed to register user. Please try again.' });
@@ -50,7 +51,6 @@ const SignUp = () => {
 
   const handleGoogleLogin = (response) => {
     console.log('Google login successful!', response);
-
   };
 
   return (
@@ -58,8 +58,7 @@ const SignUp = () => {
       <div className="info-section">
         <h2>Welcome to FocusMeet</h2>
         <p>
-          Experience seamless task management with our innovative platform. Sign up today
-          and enjoy the benefits of productivity and efficiency.
+          Sign up today and enjoy the benefits of productivity and efficiency.
         </p>
       </div>
       <div className="form-section">
@@ -67,6 +66,19 @@ const SignUp = () => {
         {success && <p className="success">{success}</p>}
         {errors.server && <p className="error">{errors.server}</p>}
         <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="userType">Sign up as:</label>
+            <select
+              id="userType"
+              name="userType"
+              value={formData.userType}
+              onChange={handleChange}
+              className="form-select"
+            >
+              <option value="Student">Student</option>
+              <option value="Teacher">Teacher</option>
+            </select>
+          </div>
           <div className="form-group">
             <label htmlFor="username">Name:</label>
             <input
@@ -105,14 +117,12 @@ const SignUp = () => {
 
           <button type="submit" className="signUp-btn">Sign Up</button>
 
-          {/* Google login */}
           <div className="google-signup">
             <GoogleLogin 
               onSuccess={handleGoogleLogin} 
               onError={() => console.log('Google login failed')}
             />
           </div>
-          {/* Already have an account */}
           <div className="already-account">
               <p>
                 Already have an account?{' '}
