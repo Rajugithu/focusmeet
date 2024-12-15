@@ -158,20 +158,74 @@
   color: #666;
 }
 
-/* Footer Section */
-footer {
-  padding: 20px;
-  text-align: center;
-  background-color: #333;
-  color: white;
-  width: 100%;
+.contact-us {
+  text-align: center; /* Center the button */
+  margin-top: 20px;   /* Add spacing between team info and button */
 }
 
-footer .btn {
-  background-color: #0d2455;
-  padding: 10px 20px;
-  margin-top: 10px;
+.contact-us .btn {
+  padding: 12px 24px;
+  font-size: 1rem;
 }
+.footer {
+  background-color: #EAEDEC; 
+  padding: 20px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+  margin: 10px 0;
+}
+
+.footer-section h5 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 5px;
+}
+
+.footer-section ul li a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer-section ul li a:hover {
+  color: #007bff; 
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 20px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 20px 0;
+}
+
 
 /* Media Queries for Responsiveness */
 

@@ -1,5 +1,5 @@
 /* Basic body and global styles */
-body {
+/* body {
     background-color: #f3f3f3;
     font-family: Arial, sans-serif;
     margin: 0;
@@ -10,7 +10,7 @@ body {
     height: 100vh;
     box-sizing: border-box;
   }
-  
+   */
   /* Container for the login form */
   .login-container {
     display: flex;
@@ -26,7 +26,7 @@ body {
   /* Info section styles */
   .info-section {
     flex: 1;
-    background-color: #43e3e2 !important;
+    background-color: #1a2b50 !important;
     color: black !important;
     padding: 30px;
     display: flex;
@@ -90,8 +90,7 @@ body {
   button {
     width: 100%;
     padding: 12px;
-    color: black !important;
-    background-color: #43e3e2;
+    background-color: #1a2b50;
     color: white;
     border: none;
     border-radius: 4px;
@@ -101,7 +100,7 @@ body {
   }
   
   button:hover {
-    background-color: #3eeeee;
+    background-color: #1a2b50;
   }
   
   /* Error and success message styles */

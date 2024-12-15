@@ -2,7 +2,7 @@
 .feedback-container {
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #f0f8ff, #f0f8ff); /* Subtle gradient background */
+    background: linear-gradient(135deg, #f0f8ff, #f0f8ff); 
     height: 100vh; /* Full screen height */
     display: flex;
     flex-direction: column;

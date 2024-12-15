@@ -1,7 +1,7 @@
 /* Basic body and global styles */
 body {
-  background-color: #f3f3f3;
-  font-family: Arial, sans-serif;
+  background-color: #EAEDEC;
+  font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
@@ -16,18 +16,18 @@ body {
   display: flex;
   max-width: 900px;
   width: 100%;
-  background-color: white;
+  background-color: #EAEDEC;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  flex-wrap: wrap;  /* This will allow the form and info section to stack on smaller screens */
+  flex-wrap: wrap;
 }
 
 /* Info section styles */
 .info-section {
   flex: 1;
-  background-color: rgb(13, 26, 49) !important;
-  color: black !important;
+  background-color: #1a2b50 !important;
+  color: #ffffff;
   padding: 30px;
   display: flex;
   flex-direction: column;
@@ -37,13 +37,15 @@ body {
 
 .info-section h2 {
   margin-bottom: 10px;
-  font-size: 24px;
+  font-size: 28px;
+  color: #f2f2f2;
 }
 
 .info-section p {
   font-size: 16px;
   line-height: 1.6;
   text-align: center;
+  color: #d1d1d1;
 }
 
 /* Form section styles */
@@ -94,13 +96,53 @@ button {
   color: white;
   border: none;
   border-radius: 4px;
-  font-size: 20px !important;
+  font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #3eeeee;
+  background-color: #0056b3;
+}
+
+/* Google login button styles */
+.google-signup {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.google-signup button {
+  background-color: #db4437;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.google-signup button:hover {
+  background-color: #c23321;
+}
+
+/* Log in link styles */
+.already-account {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.login-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.login-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
 }
 
 /* Error and success message styles */
@@ -120,17 +162,12 @@ button:hover {
 /* For Tablets */
 @media screen and (max-width: 768px) {
   .signup-container {
-    flex-direction: column;  /* Stack the form and info section */
+    flex-direction: column;
   }
 
   .info-section {
     padding: 20px;
     text-align: center;
-  }
-
-  .form-section {
-    padding: 20px;
-    max-width: 100%;
   }
 
   .info-section h2 {
@@ -141,8 +178,8 @@ button:hover {
     font-size: 14px;
   }
 
-  .form-section h2 {
-    font-size: 20px;
+  .form-section {
+    padding: 20px;
   }
 
   input {
@@ -164,7 +201,6 @@ button:hover {
 
   .form-section {
     padding: 15px;
-    max-width: 100%;
   }
 
   .info-section h2 {
