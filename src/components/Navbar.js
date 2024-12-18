@@ -26,7 +26,7 @@ const Navbar = ({ isLoggedIn }) => {
       <ul className={`navLinks ${isMenuOpen ? 'active' : ''}`}>
         <li><Link to="/home">Home</Link></li>
         <li><Link to="/about">About</Link></li>
-        <li><Link to="/contact">Feed Back</Link></li>
+        <li><Link to="/feedback">Feed Back</Link></li>
         <li><Link to="/contact">Contact</Link></li>
       </ul>
 
