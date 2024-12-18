@@ -14,7 +14,10 @@ const Home = () => {
                 {/* Main Content */}
                 <div className="main-content">
                     <h1 className="welcome-text">Welcome to the Home Page</h1>
-                    <button className="create-meeting-btn">Create a Meeting</button>
+                    <div className='home_btn'>
+                        <button className="create-meeting-btn">Create a Meeting</button>
+                        <button className="create-meeting-btn">join Meeting</button>
+                    </div>
                     <div className="course-grid">
                         <div className="course-box">
                             <img src="course-image.jpg" alt="Course" />
