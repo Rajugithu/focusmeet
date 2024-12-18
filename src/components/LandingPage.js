@@ -78,7 +78,7 @@ function LandingPage() {
       </div>
 
       <div className="team-section">
-        <h2>Meet the Team</h2>
+        {/* <h2>Team Members</h2>
         <div className="team-members">
           <div className="team-member">
             <h3>Mujahid Raja</h3>
@@ -92,7 +92,7 @@ function LandingPage() {
             <h3>Hassan Akmal</h3>
             <p>hassanakmal420@gmail.com</p>
           </div>
-        </div>
+        </div> */}
 
         {/* Contact Us Button */}
         <div className="contact-us">
@@ -108,7 +108,8 @@ function LandingPage() {
           <div className="footer-section">
             <h5>Contact Us</h5>
             <ul>
-              <li><a href="#">Questions? Contact Us</a></li>
+              <li><a href="#/">Questions?</a></li>
+              <li><a href="#/contact">Contact Us</a></li>
             </ul>
           </div>
           <div className="footer-section">
