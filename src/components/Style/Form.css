@@ -4,24 +4,22 @@ body {
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   box-sizing: border-box;
 }
 
 /* Container for the sign-up form */
 .signup-container {
   display: flex;
+  justify-content: center !important;
+  align-items: center !important;
   max-width: 900px;
-  width: 100%;
-  background-color: #EAEDEC;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  flex-wrap: wrap;
+  margin-top: 150px;
+  margin-left: 25%;
+  border: 2px solid #1a2b50;
+  border-radius: 5%;
+  background-color: #f5f7f6;
 }
+
 
 /* Info section styles */
 .info-section {
@@ -33,6 +31,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-left: 9px;
 }
 
 .info-section h2 {
@@ -113,7 +112,7 @@ button:hover {
 }
 
 .google-signup button {
-  background-color: #db4437;
+  background-color: #0056b3;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -124,7 +123,7 @@ button:hover {
 }
 
 .google-signup button:hover {
-  background-color: #c23321;
+  background-color: #0056b3;
 }
 
 /* Log in link styles */
@@ -168,6 +167,7 @@ button:hover {
   .info-section {
     padding: 20px;
     text-align: center;
+    margin-top: 65px;
   }
 
   .info-section h2 {
@@ -197,6 +197,7 @@ button:hover {
 @media screen and (max-width: 480px) {
   .info-section {
     padding: 15px;
+    margin-top: 50px;
   }
 
   .form-section {
