@@ -1,29 +1,34 @@
-import React, { useState, useEffect } from 'react'; // Add useEffect import
-import Navbar from './Navbar'; // Import Navbar
-import Sidebar from './sidebar'; // Import Sidebar
-import "./Style/Profile.css"; // Import Profile.css
-import io from 'socket.io-client'; // Import socket.io-client
+import React, { useState, useEffect } from 'react'; 
+import Navbar from './Navbar'; 
+import Sidebar from './sidebar'; 
+import "./Style/Profile.css"; 
 
 const Profile = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(true); // Set the state to true for logged-in users
-    const [socket, setSocket] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    
+    // State for storing profile information
+    const [profile, setProfile] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        bio: "."
+    });
 
-    // Establish socket connection when the component mounts
-    useEffect(() => {
-        const newSocket = io("http://localhost:5001"); // Replace with your signaling server URL
-        setSocket(newSocket);
-        return () => newSocket.close(); // Cleanup socket connection on unmount
-    }, []);
+    const [isEditing, setIsEditing] = useState(false); 
 
-    // Button click handler for creating a meeting
-    const handleCreateMeeting = () => {
-        if (socket) {
-            const roomId = "unique-room-id"; // You can generate a random ID or create one from input
-            socket.emit("createRoom", roomId); // Emit event to the server to create a room
-            window.location.href = `/live/${roomId}`; // Redirect to the live page with the room ID
-        } else {
-            alert("Socket connection is not established!");
-        }
+    // Handle input change
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setProfile({
+            ...profile,
+            [name]: value
+        });
+    };
+
+    // Toggle edit mode
+    const toggleEditMode = () => {
+        setIsEditing(!isEditing);
     };
 
     return (
@@ -32,13 +37,66 @@ const Profile = () => {
             <div className="profile-page">
                 <Sidebar /> {/* Render the Sidebar */}
                 <div className="profile-content">
-                    <h1>Welcome to your profile!</h1>
-                    <p>This is your profile page.</p>
+                    <h1>Profile Information</h1>
+                    
+                    {/* Profile Information */}
+                    {!isEditing ? (
+                        <div className="profile-info">
+                            <p><strong>First Name:</strong> {profile.firstName}</p>
+                            <p><strong>Last Name:</strong> {profile.lastName}</p>
+                            <p><strong>Email:</strong> {profile.email}</p>
+                            <p><strong>Phone:</strong> {profile.phone}</p>
+                            <p><strong>Bio:</strong> {profile.bio}</p>
+                            <button className="edit-btn" onClick={toggleEditMode}>
+                                Edit Profile
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="profile-edit-form">
+                            <label>First Name:</label>
+                            <input 
+                                type="text" 
+                                name="firstName" 
+                                value={profile.firstName} 
+                                onChange={handleInputChange} 
+                            />
+                            
+                            <label>Last Name:</label>
+                            <input 
+                                type="text" 
+                                name="lastName" 
+                                value={profile.lastName} 
+                                onChange={handleInputChange} 
+                            />
 
-                    {/* Create Meeting Button */}
-                    <button className="create-meeting-btn" onClick={handleCreateMeeting}>
-                        Create a Meeting
-                    </button>
+                            <label>Email:</label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                value={profile.email} 
+                                onChange={handleInputChange} 
+                            />
+
+                            <label>Phone:</label>
+                            <input 
+                                type="tel" 
+                                name="phone" 
+                                value={profile.phone} 
+                                onChange={handleInputChange} 
+                            />
+
+                            <label>Bio:</label>
+                            <textarea 
+                                name="bio" 
+                                value={profile.bio} 
+                                onChange={handleInputChange} 
+                            />
+
+                            <button className="save-btn" onClick={toggleEditMode}>
+                                Save Changes
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
