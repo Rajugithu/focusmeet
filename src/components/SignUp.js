@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google';  
+import { GoogleLogin, googleLogout } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 import './Style/Form.css';
 import Navbar from './Navbar';
 
@@ -9,7 +10,6 @@ const SignUp = () => {
     username: '',
     email: '',
     password: '',
-    userType: 'Student', // Default to Student
   });
 
   const [errors, setErrors] = useState({});
@@ -42,15 +42,56 @@ const SignUp = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/SignUp', formData);
       setSuccess('User registered successfully!');
-      setFormData({ username: '', email: '', password: '', userType: 'Student' });
+      setFormData({ username: '', email: '', password: '' });
       setErrors({});
     } catch (error) {
       setErrors({ server: 'Failed to register user. Please try again.' });
     }
   };
 
-  const handleGoogleLogin = (response) => {
-    console.log('Google login successful!', response);
+  const handleGoogleLogin = async (response) => {
+    console.log('Google Login Response:', response);
+  
+    // Ensure the Google Sign-In response contains the credential
+    if (!response || !response.credential) {
+      console.error('Google credential is missing');
+      setErrors({ server: 'Google login failed. Please try again.' });
+      return;
+    }
+  
+    try {
+      // Decode the Google JWT token to extract user details
+      const decoded = jwtDecode(response.credential);
+      console.log('Decoded Google JWT:', decoded);
+  
+      // Prepare the user data payload to send to the backend
+      const googleUserData = {
+        username: decoded.name, // Extracted from Google JWT
+        email: decoded.email,   // Extracted from Google JWT
+        password: decoded.sub,  // Using the unique Google user ID as the "password"
+      };
+  
+      // API request to backend for sign-up or login
+      const backendResponse = await axios.post(
+        `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/SignUp`, 
+        googleUserData
+      );
+  
+      // Handle backend response
+      console.log('Backend Response:', backendResponse.data);
+      if (backendResponse.data.success) {
+        // If sign-up or login is successful
+        setSuccess('Google Sign-Up successful! Welcome to FocusMeet.');
+        setErrors({});
+      } else {
+        // If backend returns an error
+        setErrors({ server: backendResponse.data.message || 'Failed to register Google user. Please try again.' });
+      }
+    } catch (error) {
+      // Handle errors during API request or decoding
+      console.error('Google login error:', error.response?.data || error.message);
+      setErrors({ server: 'Failed to authenticate with Google. Please try again.' });
+    }
   };
 
   return (
@@ -58,7 +99,8 @@ const SignUp = () => {
       <div className="info-section">
         <h2>Welcome to FocusMeet</h2>
         <p>
-          Sign up today and enjoy the benefits of productivity and efficiency.
+          Experience seamless task management with our innovative platform. Sign up today
+          and enjoy the benefits of productivity and efficiency.
         </p>
       </div>
       <div className="form-section">
@@ -66,19 +108,6 @@ const SignUp = () => {
         {success && <p className="success">{success}</p>}
         {errors.server && <p className="error">{errors.server}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="userType">Sign up as:</label>
-            <select
-              id="userType"
-              name="userType"
-              value={formData.userType}
-              onChange={handleChange}
-              className="form-select"
-            >
-              <option value="Student">Student</option>
-              <option value="Teacher">Teacher</option>
-            </select>
-          </div>
           <div className="form-group">
             <label htmlFor="username">Name:</label>
             <input
@@ -117,18 +146,21 @@ const SignUp = () => {
 
           <button type="submit" className="signUp-btn">Sign Up</button>
 
+          {/* Google login */}
           <div className="google-signup">
-            <GoogleLogin 
-              onSuccess={handleGoogleLogin} 
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
               onError={() => console.log('Google login failed')}
             />
           </div>
+
+          {/* Already have an account */}
           <div className="already-account">
-              <p>
-                Already have an account?{' '}
-                <a href="/login" className="login-link">Log in</a>
-              </p>
-            </div>
+            <p>
+              Already have an account?{' '}
+              <a href="/login" className="login-link">Log in</a>
+            </p>
+          </div>
         </form>
       </div>
     </div>
