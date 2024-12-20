@@ -1,38 +1,33 @@
 /* Basic body and global styles */
-/* body {
-    background-color: #f3f3f3;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    box-sizing: border-box;
-  }
-   */
-  /* Container for the login form */
-  .login-container {
-    display: flex;
-    max-width: 900px;
-    width: 100%;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    flex-wrap: wrap;  /* This will allow the form and info section to stack on smaller screens */
-  }
+body {
+  background-color: #EAEDEC;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container for the sign-up form */
+.login-container {
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+  max-width: 900px;
+  margin-top: 13%;
+  margin-left: 25%;
+  background-color: #f5f7f6;
+}
   
   /* Info section styles */
   .info-section {
     flex: 1;
     background-color: #1a2b50 !important;
-    color: black !important;
     padding: 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-radius: 5%;
   }
   
   .info-section h2 {
