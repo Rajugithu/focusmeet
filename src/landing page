@@ -1,0 +1,293 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #EAEDEC;
+
+  }
+  
+  .landing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+    background: #EAEDEC;
+     min-height: 100vh; 
+    width: 90%;
+    max-width: 100% !important;
+    overflow-x: hidden;
+    margin-top: 460px;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px 20px;
+    background-color: #EAEDEC; 
+    flex-wrap: wrap;
+  }
+  
+  .hero-content {
+    max-width: 600px;
+  }
+  
+  .hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 15px;
+  }
+  
+  .hero-content p {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .hero-details {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .hero-details li {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+  
+  .btn {
+    background-color: #0d2455;
+    color: white !important;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-align: center;
+    max-width: 250px;
+  }
+  
+  .btn:hover {
+    background-color: #1a2b50;
+  }
+  
+  .hero-image {
+    flex: 1;
+    max-width: 500px;
+  }
+  
+  .hero-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+
+  .project{
+    display: flex;
+  }
+  /* Project Overview Section */
+  .project-overview {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .project-overview h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .section {
+    margin-bottom: 30px;
+  }
+  
+  .section p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+  }
+  
+  /* How It Works Section */
+  .how-it-works {
+    background-color: #EAEDEC;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .how-it-works h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .how-it-works ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .how-it-works li {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Team Section */
+  .team-section {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .team-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .team-members {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .team-member {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    text-align: center;
+  }
+  
+  .team-member h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .team-member p {
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  /* Footer Section */
+  footer {
+    padding: 20px;
+    text-align: center;
+    background-color: #333;
+    color: white;
+    width: 100%;
+  }
+  
+  footer .btn {
+    background-color: #0d2455;
+    padding: 10px 20px;
+    margin-top: 10px;
+  }
+  
+  /* Media Queries for Responsiveness */
+  
+  /* Tablets */
+   @media (max-width: 768px) {
+    .hero-section {
+      flex-direction: column;
+      text-align: center;
+      padding: 40px 20px;
+    }
+  
+    .hero-content {
+      max-width: 100%;
+      margin-bottom: 20px;
+    }
+  
+    .hero-content h1 {
+      font-size: 2.5rem;
+    }
+  
+    .hero-content p {
+      font-size: 1.2rem;
+    }
+  
+    .hero-image {
+      max-width: 100%;
+      margin-top: 20px;
+    }
+  
+    .btn {
+      font-size: 1.1rem;
+      padding: 8px 15px;
+    }
+  
+    .project-overview h2 {
+      font-size: 2rem;
+    }
+  
+    .section p {
+      font-size: 1.1rem;
+    }
+  
+    .how-it-works h2 {
+      font-size: 2rem;
+    }
+  
+    .how-it-works li {
+      font-size: 1.1rem;
+    }
+  
+    .team-members {
+      flex-direction: column;
+    }
+  
+    .team-member {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+  
+  /* Mobile */
+  @media (max-width: 480px) {
+    .hero-content h1 {
+      font-size: 2rem;
+    }
+  
+    .hero-content p {
+      font-size: 1.1rem;
+    }
+  
+    .hero-details li {
+      font-size: 1rem;
+    }
+  
+    .btn {
+      font-size: 1rem;
+      padding: 6px 12px;
+    }
+  
+    .project-overview h2 {
+      font-size: 1.8rem;
+    }
+  
+    .section p {
+      font-size: 1rem;
+    }
+  
+    .how-it-works h2 {
+      font-size: 1.8rem;
+    }
+  
+    .how-it-works li {
+      font-size: 1rem;
+    }
+  
+    .team-member h3 {
+      font-size: 1.2rem;
+    }
+  
+    .team-member p {
+      font-size: 1rem;
+    }
+  
+    footer .btn {
+      font-size: 1rem;
+    }
+  } 
+  

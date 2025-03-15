@@ -1,0 +1,131 @@
+    /* General container styling */
+    .home-container {
+        display: flex;
+        margin-top: 120px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        width: 92vw; 
+        box-sizing: border-box;
+    }
+
+    .home_btn{
+        display: flex;
+    }
+    /* Layout for the home page content */
+    .home-layout {
+        display: flex;
+        flex: 1; 
+        width: 100%;
+        margin-left: 100px;
+        justify-content: right;
+
+    }
+
+    /* Sidebar styling */
+    .sidebar {
+        width: 250px; /* Fixed width for the sidebar */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background-color: #f4f4f4;
+        height: 100vh; /* Sidebar should take the full height of the screen */
+    }
+
+    /* Main Content Container */
+    .main-content {
+        flex-grow: 1; 
+        width: 100% !important; 
+        display: flex;
+        flex-direction: column; 
+        justify-content: flex-start; 
+        align-items: center; 
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        margin-left: 130px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Welcome text styling */
+    .welcome-text {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* Create Meeting button styling */
+    .create-meeting-btn {
+        padding: 12px 24px;
+        font-size: 20px;
+        max-width: 350px;
+        font-weight: bold;
+        margin-left: 10px;
+        color: white;
+        background-color: #1a2b50;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .create-meeting-btn:hover {
+        background-color: #1a2b50;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    /* Course Grid Container */
+    .course-grid {
+        display: grid;
+        margin-right: 0px;
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+        gap: 20px;
+        width: 100%;
+        margin-top: 20px;
+    }   
+    /* Single Course Box */
+    .course-box {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .course-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Course Image */
+    .course-box img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* Course Title */
+    .course-box h3 {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-top: 15px;
+    }
+
+    /* Navbar styling */
+    .navbar {
+        width: 100%;
+        background-color: #43e3e2;
+        padding: 10px 20px;
+        color: black;
+        font-size: 18px;
+        text-align: center;
+        border-radius: 5px;
+    }
