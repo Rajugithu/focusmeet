@@ -1,45 +1,43 @@
-class Lecture {
-    constructor(id, title, subject, teacherId, startTime, endTime) {
-        this.id = id;
-        this.title = title;
-        this.subject = subject;
-        this.teacherId = teacherId;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.studentsEnrolled = [];
-        this.isOngoing = false;
-    }
+const mongoose = require('mongoose');
 
-    startLecture() {
-        if (!this.isOngoing) {
-            this.isOngoing = true;
-            console.log(`Lecture "${this.title}" has started.`);
-        } else {
-            console.log(`Lecture "${this.title}" is already ongoing.`);
-        }
-    }
+const LectureSchema = new mongoose.Schema({
+    title: {type: String,required: true},
+    teacherId: {type: mongoose.Schema.Types.ObjectId,ref: 'Teacher',required: true},
+    subject: {type: String,required: true},
+    startTime: {type: Date,default: Date.now},
+    endTime: {type: Date},
+    isActive: {type: Boolean,default: true},
+    students: [{type: mongoose.Schema.Types.ObjectId,ref: 'Student'}]
+}, { timestamps: true });
 
-    endLecture() {
-        if (this.isOngoing) {
-            this.isOngoing = false;
-            console.log(`Lecture "${this.title}" has ended.`);
-        } else {
-            console.log(`Lecture "${this.title}" is not active.`);
-        }
-    }
+/** 
+ * Method: End Lecture
+ * Marks the lecture as completed
+ */
+LectureSchema.methods.endLecture = async function () {
+    this.endTime = new Date();
+    this.isActive = false;
+    await this.save();
+};
 
-    enrollStudent(studentId) {
-        if (!this.studentsEnrolled.includes(studentId)) {
-            this.studentsEnrolled.push(studentId);
-            console.log(`Student ${studentId} enrolled in lecture "${this.title}".`);
-        } else {
-            console.log(`Student ${studentId} is already enrolled.`);
-        }
-    }
+/**
+ * Static Method: Find Active Lectures
+ * Returns all currently active lectures
+ */
+LectureSchema.statics.findActiveLectures = function () {
+    return this.find({ isActive: true });
+};
 
-    getLectureInfo() {
-        console.log(`Lecture: ${this.title}, Subject: ${this.subject}, Teacher: ${this.teacherId}, Enrolled Students: ${this.studentsEnrolled.length}`);
+/**
+ * Method: Add Student to Lecture
+ * Adds a student to the lecture session
+ */
+LectureSchema.methods.addStudent = async function (studentId) {
+    if (!this.students.includes(studentId)) {
+        this.students.push(studentId);
+        await this.save();
     }
-}
+};
 
+const Lecture = mongoose.model('Lecture', LectureSchema);
 module.exports = Lecture;

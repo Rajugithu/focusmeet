@@ -1,8 +1,6 @@
-const Lecture = require('../models/lecture');
+const Lecture = require('../models/Lecture');
 
-// @desc   Create a new lecture
-// @route  POST /api/lectures
-// @access Private (Only teachers can create)
+
 exports.createLecture = async (req, res) => {
     try {
         const { title, description, teacher, date, duration } = req.body;
@@ -13,6 +11,7 @@ exports.createLecture = async (req, res) => {
 
         const lecture = new Lecture({ title, description, teacher, date, duration });
         const savedLecture = await lecture.save();
+    
         res.status(201).json(savedLecture);
     } catch (error) {
         res.status(500).json({ message: "Server error", error });

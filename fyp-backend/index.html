@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket.IO Test</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <script>
+        const socket = io("http://localhost:5000"); // Connect to your server
+
+        socket.on("connect", () => {
+            console.log("Connected:", socket.id);
+            socket.emit("joinRoom", "testRoom"); // Join a test room
+        });
+
+        socket.on("userJoined", (userId) => {
+            console.log("User joined:", userId);
+        });
+
+        socket.on('disconnect',()=>{
+            console.log("disconnected");
+        })
+    </script>
+</body>
+</html>

@@ -1,7 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../../models/user'); 
+const User = require('../../models/User');
+const Teacher = require("../../models/Teacher");
 require('dotenv').config();
 
 const router = express.Router();
@@ -10,36 +11,31 @@ const router = express.Router();
 // @desc    Register a new user
 // @access  Public
 router.post('/signup', async (req, res) => {
-    const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body; // Add role here
 
-    try {
-        // Check if user already exists
-        let user = await User.findOne({ email });
-        if (user) {
-            return res.status(400).json({ msg: 'User already exists' });
-        }
+  try {
+      let user = await User.findOne({ email });
+      if (user) {
+          return res.status(400).json({ msg: 'User already exists' });
+      }
 
-        // Create new user
-        user = new User({ name, email, password });
+      user = new User({ name, email, password, role }); // Include role here
 
-        // Hash password before saving
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
 
-        // Save user to the database
-        await user.save();
+      await user.save();
 
-        // Generate JWT token
-        const payload = { user: { id: user.id } };
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-            if (err) throw err;
-            res.json({ token, msg: 'User registered successfully' });
-        });
+      const payload = { user: { id: user.id, role: user.role } }; // Include role in payload
+      jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+          if (err) throw err;
+          res.json({ token, msg: 'User registered successfully', role: user.role });
+      });
 
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+  }
 });
 
 // @route   POST /api/auth/login

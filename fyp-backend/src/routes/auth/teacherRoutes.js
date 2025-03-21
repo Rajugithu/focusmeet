@@ -1,12 +1,17 @@
-const express = require('express');
-const { getAllTeachers, getTeacherById, updateTeacher, deleteTeacher } = require('../controllers/teacherController');
-const { protect, admin } = require('../middlewares/authMiddleware');
-
+const express = require("express");
 const router = express.Router();
+const { getAllTeachers, getTeacherById, createSession, enrollStudents, addClass, endSession } = require("../../controllers/teacherController");
 
-router.get('/', protect, admin, getAllTeachers);
-router.get('/:id', protect, getTeacherById);
-router.put('/:id', protect, updateTeacher);
-router.delete('/:id', protect, admin, deleteTeacher);
+// Routes for teacher management
+router.get("/", getAllTeachers);
+router.get("/:id", getTeacherById);
+
+// Session-related routes
+router.post("/:id/session", createSession);
+router.put("/:id/session/:sessionId/enroll", enrollStudents);
+router.put("/:id/session/:sessionId/end", endSession);
+
+// Add subject/class
+router.put("/:id/add-class", addClass);
 
 module.exports = router;

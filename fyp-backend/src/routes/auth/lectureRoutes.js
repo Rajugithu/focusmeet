@@ -1,13 +1,13 @@
 const express = require('express');
-const { createLecture, getAllLectures, getLectureById, updateLecture, deleteLecture } = require('../controllers/lectureController');
-const { protect, teacherOnly, admin } = require('../middlewares/authMiddleware');
+const { createLecture, getAllLectures, getLectureById, updateLecture, deleteLecture } = require('../../controllers/lectureController');
+const {teacherOnly} = require('../../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.post('/', protect, teacherOnly, createLecture);
-router.get('/', protect, getAllLectures);
-router.get('/:id', protect, getLectureById);
-router.put('/:id', protect, teacherOnly, updateLecture);
-router.delete('/:id', protect, teacherOnly, deleteLecture);
+router.post('/', createLecture);
+router.get('/', getAllLectures);
+router.get('/:id', getLectureById);
+router.put('/:id', teacherOnly, updateLecture);
+router.delete('/:id', teacherOnly, deleteLecture);
 
 module.exports = router;

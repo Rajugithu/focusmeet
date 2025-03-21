@@ -1,6 +1,6 @@
 const Report = require('../models/report');
-const User = require('../models/user');
-const Lecture = require('../models/lecture');
+const User = require('../models/User');
+const Lecture = require('../models/Lecture');
 
 // @desc   Generate a report based on engagement data
 // @route  POST /api/reports
