@@ -1,6 +1,6 @@
 const Engagement = require('../models/engagementDetector');
-const Student = require('../models/student');
-const Lecture = require('../models/lecture');
+const Student = require('../models/Student');
+const Lecture = require('../models/Lecture');
 
 // @desc   Record student engagement in a lecture
 // @route  POST /api/engagement

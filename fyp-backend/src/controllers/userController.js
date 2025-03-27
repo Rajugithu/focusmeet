@@ -1,10 +1,13 @@
-const User = require('../models/user');
+const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 // Register a new User
 exports.registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+
+        // console.log("Received signup request:", req.body);
+
+        const { name, email, password, role } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -13,7 +16,7 @@ exports.registerUser = async (req, res) => {
         }
 
         // Create new user (password stored in plain text)
-        const newUser = new User({ name, email, password });
+        const newUser = new User({ name, email, password, role });
         await newUser.save();
 
         res.status(201).json({ message: "User registered successfully", user: newUser });
@@ -30,12 +33,12 @@ exports.loginUser = async (req, res) => {
         // Check if the user exists
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ msg: 'Invalid credentials' });
+            return res.status(400).json({ msg: 'Invalid credentials jkhkjhjkhk' });
         }
 
         // Compare password (plain text comparison)
         if (password !== user.password) {
-            return res.status(400).json({ msg: 'Invalid credentials' });
+            return res.status(400).json({ msg: 'Invalid credentials jhkkhkjhk' });
         }
 
         // Generate JWT token
@@ -49,6 +52,7 @@ exports.loginUser = async (req, res) => {
 
 // Get User Profile
 exports.getProfile = async (req, res) => {
+    console.log("req.user:", req.user);
     try {
         const user = await User.findById(req.user.id).select('-password');
         if (!user) {

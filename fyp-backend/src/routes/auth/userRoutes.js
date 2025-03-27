@@ -1,6 +1,6 @@
 const express = require('express');
-const { registerUser, loginUser, getUserProfile, updateUser, deleteUser } = require('../controllers/userController');
-const { protect } = require('../middlewares/authMiddleware');  // Middleware for authentication
+const { registerUser, loginUser, getProfile, updateProfile, deleteProfile } = require('../../controllers/userController');
+const { protect } = require('../../middleware/authMiddleware');  // Middleware for authentication
 
 const router = express.Router();
 
@@ -9,8 +9,8 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 
 // Protected Routes (Requires JWT)
-router.get('/profile', protect, getUserProfile);
-router.put('/update', protect, updateUser);
-router.delete('/delete', protect, deleteUser);
+router.get('/profile', protect, getProfile);
+router.put('/update', protect, updateProfile);
+router.delete('/delete', protect, deleteProfile);
 
 module.exports = router;
