@@ -1,0 +1,8 @@
+
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#EAF3FC"/>
+  <rect x="50" y="50" width="700" height="500" fill="#CB6A9A" opacity="0.1" rx="8"/>
+  <text x="400" y="300" font-family="Arial" font-size="24" fill="#20232A" text-anchor="middle">
+    HERO IMAGE PLACEHOLDER
+  </text>
+</svg>
