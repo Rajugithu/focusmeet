@@ -1,6 +1,8 @@
 import React from "react";
 import { useParams } from "wouter";
-import MeetingPage from "../../pages/MeetingPage";
+//import MeetingPage from "../../pages/MeetingPage";
+import TeacherPage from "@/pages/TeacherPage";
+//import StudentPage from "@/pages/StudentPage"
 import MeetingComponent from "../layout/MeetingComponent";
 
 const MeetingWrapper: React.FC = () => {
@@ -9,9 +11,11 @@ const MeetingWrapper: React.FC = () => {
 
     return (
         <>
-            <MeetingPage />
-            <MeetingComponent meetingId={meetingId} />
+            <TeacherPage />
+            debugger;
+            {/* <MeetingComponent meetingId={meetingId} /> */}
         </>
+       
     );
 };
 

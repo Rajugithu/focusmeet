@@ -1,51 +1,22 @@
-// client/src/pages/TeacherDashboard.tsx
 import React, { useRef, useState } from "react";
 import Sidebar from "../components/layout/Sidebar";
-import { useLocation } from "wouter";
+import { useNavigate } from "react-router-dom"; // Importing useNavigate for redirection
 
 const TeacherDashboard: React.FC = () => {
-  const [, navigate] = useLocation(); // Get the navigate function from useLocation
+  const navigate = useNavigate(); // Use the navigate function from useNavigate
   const videoRef = useRef<HTMLVideoElement>(null); // Reference for video element
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null); // State to manage the video stream
+  const [roomId, setRoomId] = useState<string>('');
+   
 
+  // Function to handle creating the meeting
   const handleCreateMeeting = async () => {
-    try {
-      console.log("Trying to create a session...");
-      
-      // Request camera and microphone access
-      await startSession();
-
-      console.log("let's create a video session..!")
-      const response = await fetch("http://localhost:5000/api/meetings/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create a meeting");
-      }
-
-      const data = await response.json();
-      console.log("Meeting Created:", data);
-
-      // Navigate to the meeting page with the generated meeting ID
-      navigate(`/meeting/${data.meetingId}`);
-    } catch (error) {
-      console.error("Error creating meeting:", error);
-    }
-  };
-
-  const startSession = async () => {
-    try {
-      const userStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      if (videoRef.current) {
-        videoRef.current.srcObject = userStream;
-        videoRef.current.play();
-      }
-      setStream(userStream);
-    } catch (error) {
-      console.error("Error accessing media devices:", error);
-    }
+    const newRoomId = Math.random().toString(36).substring(2, 8); // 6-character ID
+    setRoomId(newRoomId);
+    localStorage.setItem('meetingRoomId', newRoomId);
+  
+    navigate(`/TeacherPage/${newRoomId}`);
+    debugger; 
   };
 
   return (
@@ -61,7 +32,8 @@ const TeacherDashboard: React.FC = () => {
           </button>
         </div>
         <h1 className="text-2xl font-semibold mb-4">Teacher Dashboard</h1>
-        {/* <p className="mb-4">Welcome Teacher!</p> */}
+
+        {/* Upcoming Classes */}
         <div>
           <h2 className="text-lg font-semibold mb-2">Upcoming Classes</h2>
           <ul className="list-disc list-inside">
@@ -70,6 +42,8 @@ const TeacherDashboard: React.FC = () => {
             <li className="mb-1">English 303 - 12:00 PM</li>
           </ul>
         </div>
+
+        {/* Recent Activities */}
         <div className="mt-4">
           <h2 className="text-lg font-semibold mb-2">Recent Activities</h2>
           <ul className="list-disc list-inside">
@@ -78,7 +52,7 @@ const TeacherDashboard: React.FC = () => {
             <li className="mb-1">Scheduled a parent-teacher meeting.</li>
           </ul>
         </div>
-      </div>
+        </div>
     </div>
   );
 };

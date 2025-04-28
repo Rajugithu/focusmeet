@@ -31,12 +31,6 @@ const Sidebar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link
-              href="/settings"
-              className={`block p-2 rounded hover:bg-gray-200 ${isActive('/settings')}`}
-            >
-              Settings
-            </Link>
           </li>
           <li>
             <Link

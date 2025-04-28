@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'wouter';
-import { setupWebRTC, ICE_SERVERS } from '@/lib/webRTC';
+//import { setupWebRTC, ICE_SERVERS } from '@/lib/webRTC';
 import { io, Socket } from 'socket.io-client';
 
 const MeetingPage: React.FC = () => {
@@ -14,26 +14,21 @@ const MeetingPage: React.FC = () => {
   const localStreamRef = useRef<MediaStream | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const role = localStorage.getItem('role');
 
   const createPeerConnection = async (peerId: string) => {
     try {
-      console.log('Creating peer connection for:', peerId);
       const peerConnection = new RTCPeerConnection(ICE_SERVERS);
       peersRef.current.set(peerId, peerConnection);
 
-      // Add local stream tracks to the peer connection
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach(track => {
-          console.log('Adding track:', track.kind);
           peerConnection.addTrack(track, localStreamRef.current!);
         });
       }
 
-      // Handle remote streams
       peerConnection.ontrack = (event) => {
-        console.log('Received remote track:', event.track.kind);
         if (event.streams && event.streams[0]) {
-          console.log('Setting remote stream for peer:', peerId);
           setRemoteStreams(prev => {
             const newStreams = new Map(prev);
             newStreams.set(peerId, event.streams[0]);
@@ -42,43 +37,38 @@ const MeetingPage: React.FC = () => {
         }
       };
 
-      // Handle ICE candidates
       peerConnection.onicecandidate = (event) => {
         if (event.candidate) {
-          console.log('Sending ICE candidate to:', peerId);
           socket?.emit('iceCandidate', event.candidate, peerId);
         }
       };
 
-      // Add connection state change handlers
       peerConnection.onconnectionstatechange = () => {
-        console.log('Connection state changed:', peerConnection.connectionState);
+        console.log('Connection state:', peerConnection.connectionState);
+        debugger;
       };
 
       peerConnection.oniceconnectionstatechange = () => {
-        console.log('ICE connection state changed:', peerConnection.iceConnectionState);
+        console.log('ICE state:', peerConnection.iceConnectionState);
+        debugger;
       };
 
       return peerConnection;
     } catch (error) {
-      console.error('Error creating peer connection:', error);
+      console.error('Peer connection error:', error);
       throw error;
     }
   };
 
   const handleOffer = async (offer: RTCSessionDescriptionInit, peerId: string) => {
     try {
-      console.log('Handling offer from:', peerId);
       const peerConnection = await createPeerConnection(peerId);
       await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-      
       const answer = await peerConnection.createAnswer();
       await peerConnection.setLocalDescription(answer);
-      
-      console.log('Sending answer to:', peerId);
       socket?.emit('answer', answer, peerId);
     } catch (error) {
-      console.error('Error handling offer:', error);
+      console.error('Offer handling error:', error);
     }
   };
 
@@ -106,27 +96,25 @@ const MeetingPage: React.FC = () => {
       });
 
       socket.on('connect', () => {
-        console.log('Socket.IO connection established');
-        socket.emit('joinRoom', meetingId);
+        socket.emit('joinRoom', { roomId: meetingId, role: role });
+        debugger;
+        console.log('user connected to server', meetingId);
+        debugger;
       });
 
       socket.on('connect_error', (error) => {
-        console.error('Socket.IO connection error:', error);
-        setError('Failed to connect to server. Please check if the server is running.');
+        setError('Failed to connect to server.');
       });
 
       socket.on('disconnect', (reason) => {
-        console.log('Socket.IO disconnected:', reason);
         if (reason === 'io server disconnect') {
           socket.connect();
         }
       });
 
       socket.on('existingUsers', async (users) => {
-        console.log('Existing users:', users);
         for (const userId of users) {
           if (userId !== socket.id) {
-            console.log('Creating offer for existing user:', userId);
             const peerConnection = await createPeerConnection(userId);
             const offer = await peerConnection.createOffer();
             await peerConnection.setLocalDescription(offer);
@@ -136,7 +124,6 @@ const MeetingPage: React.FC = () => {
       });
 
       socket.on('userJoined', async (userId) => {
-        console.log('New user joined:', userId);
         const peerConnection = await createPeerConnection(userId);
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);
@@ -144,23 +131,18 @@ const MeetingPage: React.FC = () => {
       });
 
       socket.on('offer', async (offer, peerId) => {
-        console.log('Received offer from:', peerId);
         await handleOffer(offer, peerId);
       });
 
       socket.on('answer', async (answer, peerId) => {
-        console.log('Received answer from:', peerId);
         await handleAnswer(answer, peerId);
       });
 
       socket.on('iceCandidate', async (candidate, peerId) => {
-        console.log('Received ICE candidate from:', peerId);
         await handleNewICECandidate(candidate, peerId);
       });
 
       socket.on('userDisconnected', (userId) => {
-        console.log('User disconnected:', userId);
-        // Handle user disconnection
         const peerConnection = peersRef.current.get(userId);
         if (peerConnection) {
           peerConnection.close();
@@ -175,8 +157,8 @@ const MeetingPage: React.FC = () => {
 
       setSocket(socket);
     } catch (error) {
-      console.error('Error initializing Socket.IO:', error);
-      setError('Failed to initialize connection');
+      console.error('Socket init error:', error);
+      setError('Could not initialize socket');
     }
   };
 
@@ -185,18 +167,13 @@ const MeetingPage: React.FC = () => {
 
     const initLocalStream = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-          video: true, 
-          audio: true 
-        });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         localStreamRef.current = stream;
         if (localVideoRef.current) {
           localVideoRef.current.srcObject = stream;
         }
-        console.log('Local stream initialized successfully');
       } catch (err) {
-        console.error('Failed to get local stream', err);
-        setError('Failed to access camera/microphone. Please check permissions.');
+        setError('Failed to access camera/mic');
       }
     };
 
@@ -204,7 +181,7 @@ const MeetingPage: React.FC = () => {
 
     return () => {
       socket?.disconnect();
-      peersRef.current.forEach((pc) => pc.close());
+      peersRef.current.forEach(pc => pc.close());
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach(track => track.stop());
       }
@@ -213,19 +190,10 @@ const MeetingPage: React.FC = () => {
 
   const toggleMute = () => {
     if (localStreamRef.current) {
-      localStreamRef.current.getAudioTracks().forEach((track) => {
+      localStreamRef.current.getAudioTracks().forEach(track => {
         track.enabled = !isMuted;
       });
       setIsMuted(!isMuted);
-    }
-  };
-
-  const shareMeetingLink = () => {
-    if (meetingId) {
-      navigator.clipboard.writeText(window.location.href);
-      alert('Meeting link copied to clipboard!');
-    } else {
-      alert('Meeting ID is undefined.');
     }
   };
 
@@ -233,7 +201,7 @@ const MeetingPage: React.FC = () => {
     try {
       if (!isSharingScreen) {
         const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-        localStreamRef.current?.getVideoTracks().forEach((track) => track.stop());
+        localStreamRef.current?.getVideoTracks().forEach(track => track.stop());
         localStreamRef.current = screenStream;
         if (localVideoRef.current) localVideoRef.current.srcObject = screenStream;
         setIsSharingScreen(true);
@@ -244,22 +212,29 @@ const MeetingPage: React.FC = () => {
         setIsSharingScreen(false);
       }
     } catch (err) {
-      console.error('Error sharing screen', err);
+      console.error('Screen share error:', err);
+    }
+  };
+
+  const shareMeetingLink = () => {
+    if (meetingId) {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Meeting link copied to clipboard!');
     }
   };
 
   const endCall = () => {
-    peersRef.current.forEach((pc) => pc.close());
+    peersRef.current.forEach(pc => pc.close());
     peersRef.current.clear();
-    const userRole=localStorage.getItem('role');
-    if (userRole==='student'){
+
+    const role = localStorage.getItem('role');
+    if (role === 'student') {
       window.location.href = '/student-dashboard';
-    } else if(userRole==='teacher'){
+    } else if (role === 'teacher') {
       window.location.href = '/teacher-dashboard';
     } else {
       window.location.href = '/';
     }
-    
   };
 
   return (
@@ -267,12 +242,12 @@ const MeetingPage: React.FC = () => {
       <h1 className="text-2xl font-bold mb-4">Meeting: {meetingId}</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
         <div className="relative">
-          <video 
-            ref={localVideoRef} 
-            autoPlay 
-            playsInline 
-            muted 
-            className="w-64 h-48 border rounded-lg" 
+          <video
+            ref={localVideoRef}
+            autoPlay
+            playsInline
+            muted
+            className="w-64 h-48 border rounded-lg"
           />
           <span className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 text-xs rounded">
             You
@@ -306,13 +281,13 @@ const MeetingPage: React.FC = () => {
         <button onClick={toggleScreenShare} className="bg-gray-700 p-2 rounded">
           {isSharingScreen ? 'Stop Share' : 'Share Screen'}
         </button>
-        <button onClick={endCall} className="bg-red-500 p-2 rounded">
-          End
+        <button onClick={endCall} className="bg-red-600 p-2 rounded">
+          End Call
         </button>
       </div>
       {error && (
         <div className="mt-4 text-red-500">
-          {error}
+          <p>{error}</p>
         </div>
       )}
     </div>

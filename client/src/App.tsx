@@ -1,18 +1,23 @@
-import React, { useEffect, ReactNode } from 'react';
+import { Buffer } from 'buffer';
+import process from 'process';
+
+// Set the global objects that simple-peer expects
+window.Buffer = Buffer;
+window.process = process;
+
+import { useEffect, ReactNode } from 'react';
 import { Switch, Route, useLocation } from "wouter";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
-import MeetingPage from "./pages/MeetingPage";
-import MeetingComponent from "./components/layout/MeetingComponent"; // Import the MeetingComponent
-import MeetingWrapper from "./components/layout/MeetingWrapper"; 
-
+import TeacherPage from "./pages/TeacherPage";
+import StudentPage from "./pages/StudentPage";
 
 interface ProtectedRouteProps {
     children: ReactNode;
@@ -33,7 +38,6 @@ const ProtectedRoute = ({ children, role }: ProtectedRouteProps) => {
     useEffect(() => {
         if (!isAuthenticated()) {
             setLocation("/login");
-            return;
         }
     }, [location, setLocation, role]);
 
@@ -64,14 +68,21 @@ function Router() {
                 </ProtectedRoute>
             </Route>
 
-            {/* Protected Meeting Page */}
-            <Route path="/meeting/:meetingId">
-                <ProtectedRoute>
-                    <MeetingWrapper />
+            {/* Route for Teacher page to Create meeting */}
+            <Route path="/TeacherPage/:roomId">
+                <ProtectedRoute role="teacher">
+                    <TeacherPage />
                 </ProtectedRoute>
             </Route>
 
-            <Route component={NotFound} />
+            {/* Route for Student page to join the meeting */}
+            <Route path="/StudentPage/:roomId">
+                <ProtectedRoute role="student">
+                    <StudentPage />
+                </ProtectedRoute>
+            </Route>
+
+            <Route component={NotFound} path={''} />
         </Switch>
     );
 }
@@ -84,5 +95,4 @@ function App() {
         </QueryClientProvider>
     );
 }
-
 export default App;
