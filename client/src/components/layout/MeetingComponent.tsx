@@ -19,18 +19,14 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
     const [error, setError] = useState<string | null>(null);
     const [frameCount, setFrameCount] = useState(0);
     const [lastResult, setLastResult] = useState<AnalysisResult | null>(null);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
     const analysisIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
     const userRole = localStorage.getItem('role');
-    const roomId = localStorage.getItem("meetingRoomId") || '';
     const userId = localStorage.getItem('userId') || 'unknown';
 
-    // Initialize canvas and video handling
+    // Cleanup on unmount
     useEffect(() => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 640;
-        canvas.height = 480;
-        (canvasRef as React.MutableRefObject<HTMLCanvasElement | null>).current = canvas;
-
         return () => {
             if (analysisIntervalRef.current) {
                 clearInterval(analysisIntervalRef.current);
@@ -38,165 +34,175 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
         };
     }, []);
 
-    // Handle stream changes
+    // Stream handling
     useEffect(() => {
         if (!videoRef.current || !stream) return;
 
         videoRef.current.srcObject = stream;
-        debugger;
-        const handleLoadedMetadata = () => {
-            console.log("Video stream ready");
-            if (userRole === 'student' && hasJoined) {
-                startFaceAnalysis();
-                debugger;
+
+        const handleCanPlay = async () => {
+            try {
+                await videoRef.current?.play();
+                setStatus('Stream active');
+                
+                if (userRole === 'student' && hasJoined) {
+                    startFaceAnalysis();
+                }
+            } catch (e) {
+                console.error("Video play error:", e);
+                setError('Failed to play video stream');
             }
-            
         };
 
-        videoRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
-        
+        videoRef.current.addEventListener('canplay', handleCanPlay);
+
         return () => {
             if (videoRef.current) {
-                videoRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata);
+                videoRef.current.removeEventListener('canplay', handleCanPlay);
             }
         };
     }, [stream, hasJoined, userRole]);
 
-    // Start/stop monitoring based on join status
+    // Start/stop analysis based on join status and role
     useEffect(() => {
-        debugger;
         if (userRole !== 'student' || !hasJoined) {
-            debugger;
-            if (analysisIntervalRef.current) {
-                clearInterval(analysisIntervalRef.current);
-                analysisIntervalRef.current = null;
-            }
+            stopFaceAnalysis();
             return;
         }
 
-        if (stream) {
+        if (videoRef.current && videoRef.current.readyState >= 2 && stream) {
             startFaceAnalysis();
         }
-
-        return () => {
-            if (analysisIntervalRef.current) {
-                clearInterval(analysisIntervalRef.current);
-            }
-        };
     }, [hasJoined, stream, userRole]);
 
     const startFaceAnalysis = () => {
-        if (analysisIntervalRef.current) {
-            clearInterval(analysisIntervalRef.current);
-        }
+        stopFaceAnalysis(); // Clear any existing interval
         
-        // Initial analysis
+        // Initial capture
         captureAndAnalyzeFrame();
-        debugger;
         
-        // Set up periodic analysis
+        // Set up periodic capture
         analysisIntervalRef.current = setInterval(() => {
             captureAndAnalyzeFrame();
-        }, 2000);
+        }, 2000); // Analyze every 2 seconds
+    };
+
+    const stopFaceAnalysis = () => {
+        if (analysisIntervalRef.current) {
+            clearInterval(analysisIntervalRef.current);
+            analysisIntervalRef.current = null;
+        }
+        setIsAnalyzing(false);
     };
 
     const captureAndAnalyzeFrame = async () => {
         const video = videoRef.current;
         const canvas = canvasRef.current;
-        debugger;
-        
-        if (!video || !canvas || video.readyState < 3) {
+    
+        if (!video || !canvas || !stream || !stream.active || video.readyState < 2 || video.videoWidth === 0) {
             console.log("Video not ready for capture");
-            debugger;
             return;
         }
-
+    
+        if (isAnalyzing) return; // Skip if previous analysis is still in progress
+    
         try {
+            setIsAnalyzing(true);
+            setStatus('Analyzing...');
+            
             // Set canvas dimensions to match video
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            
+    
             const ctx = canvas.getContext('2d');
             if (!ctx) throw new Error('Canvas context not available');
-
-            // Draw video frame to canvas
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            // Convert to blob for analysis
-            const blob = await new Promise<Blob | null>((resolve) => {
-                canvas.toBlob(resolve, 'image/jpeg', 0.9);
-            });
-
-            if (!blob) throw new Error('Failed to create image blob');
-
-            const formData = new FormData();
-            formData.append('frame', blob, 'frame.jpg');
-            formData.append('roomId', roomId);
-            formData.append('studentId', userId);
-            formData.append('timestamp', Date.now().toString());
-
-            const response = await fetch('http://localhost:5000/api/ai/process-frame', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Room-ID': roomId,
-                    'Cache-Control': 'no-cache'
+    
+            // Clear and draw the current video frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.scale(-1, 1); // Mirror the image
+            ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+            ctx.restore();
+    
+            // Convert canvas to Blob and send to server
+            canvas.toBlob(async (blob) => {
+                if (!blob) {
+                    setIsAnalyzing(false);
+                    return;
                 }
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.message || 'Analysis failed');
-            }
-
-            const result: AnalysisResult = await response.json();
-            
-            if (typeof result.faceDetected !== 'boolean') {
-                throw new Error('Invalid AI response format');
-            }
-
-            setLastResult(result);
-            setFrameCount(prev => prev + 1);
-            updateStatusFromResult(result);
-
+    
+                try {
+                    const formData = new FormData();
+                    formData.append('image', blob, 'frame.jpg');
+                    formData.append('meetingId', meetingId);
+                    formData.append('userId', userId);
+    
+                    const response = await fetch('/api/analyze-frame', {
+                        method: 'POST',
+                        body: formData,
+                    });
+    
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        const text = await response.text();
+                        throw new Error(`Unexpected Response: ${text.substring(0, 100)}`);
+                    }
+    
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.message || `Server returned ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    setLastResult(result);
+                    updateStatusFromResult(result);
+                    setFrameCount(prev => prev + 1);
+                } catch (err) {
+                    console.error('Analysis error:', err);
+                    setError(
+                        err instanceof Error 
+                            ? err.message 
+                            : typeof err === 'string' 
+                                ? err 
+                                : 'Analysis failed'
+                    );
+                } finally {
+                    setIsAnalyzing(false);
+                }
+            }, 'image/jpeg', 0.8); // JPEG at 80% quality
         } catch (error) {
-            console.error('Frame analysis error:', error);
-            const errorMessage = error instanceof Error ? error.message : 'Analysis failed';
-            
-            if (!errorMessage.includes('temporary')) {
-                setError(`Analysis error: ${errorMessage}`);
-            }
-            
-            // Retry with increasing delay
-            const delay = Math.min(1000 * (frameCount + 1), 5000);
-            setTimeout(() => captureAndAnalyzeFrame(), delay);
+            console.error('Capture error:', error);
+            setError('Frame capture failed');
+            setIsAnalyzing(false);
         }
     };
 
     const updateStatusFromResult = (result: AnalysisResult) => {
-        if (result.faceDetected) {
-            setStatus(result.isAttentive 
-                ? `Attentive (${Math.round(result.confidence * 100)}%)`
-                : `Distracted (${Math.round(result.confidence * 100)}%)`
-            );
-        } else {
+        if (!result.faceDetected) {
             setStatus('No face detected');
+            return;
         }
+
+        const confidencePercent = Math.round(result.confidence * 100);
+        setStatus(result.isAttentive
+            ? `Attentive (${confidencePercent}%)`
+            : `Distracted (${confidencePercent}%)`);
     };
 
     return (
         <div className="relative w-[640px] h-[480px] bg-black overflow-hidden mx-auto mt-8 rounded-lg shadow-xl">
             {/* Status overlay */}
             <div className={`absolute top-2 left-2 z-20 px-2 py-1 rounded text-sm font-mono
-                ${lastResult?.isAttentive ? 'bg-green-500/90 text-white' : 
-                  lastResult?.faceDetected ? 'bg-yellow-500/90 text-black' : 
-                  'bg-red-500/90 text-white'}`}>
+                ${isAnalyzing ? 'bg-blue-500/90 text-white' :
+                    lastResult?.isAttentive ? 'bg-green-500/90 text-white' :
+                        lastResult?.faceDetected ? 'bg-yellow-500/90 text-black' :
+                            'bg-red-500/90 text-white'}`}>
                 {status}
                 {error && <div className="text-xs mt-1">{error}</div>}
                 <div className="text-xs">Frames analyzed: {frameCount}</div>
             </div>
-            
-            {/* Video element */}
+
+            {/* Video stream */}
             <video
                 ref={videoRef}
                 autoPlay
@@ -204,6 +210,9 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
                 muted
                 className="w-full h-full object-cover scale-x-[-1]"
             />
+
+            {/* Hidden Canvas (used for frame capture) */}
+            <canvas ref={canvasRef} className="hidden" />
         </div>
     );
 };
