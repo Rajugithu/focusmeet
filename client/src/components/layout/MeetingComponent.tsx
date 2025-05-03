@@ -104,75 +104,81 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
             return;
         }
     
-        if (isAnalyzing) return; // Skip if previous analysis is still in progress
+        if (isAnalyzing) return;
     
         try {
             setIsAnalyzing(true);
             setStatus('Analyzing...');
+            setError(null);
             
-            // Set canvas dimensions to match video
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
     
             const ctx = canvas.getContext('2d');
             if (!ctx) throw new Error('Canvas context not available');
     
-            // Clear and draw the current video frame
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.save();
-            ctx.scale(-1, 1); // Mirror the image
+            ctx.scale(-1, 1);
             ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
             ctx.restore();
     
-            // Convert canvas to Blob and send to server
-            canvas.toBlob(async (blob) => {
-                if (!blob) {
-                    setIsAnalyzing(false);
-                    return;
-                }
+            // Create abort controller for timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
     
-                try {
-                    const formData = new FormData();
-                    formData.append('image', blob, 'frame.jpg');
-                    formData.append('meetingId', meetingId);
-                    formData.append('userId', userId);
+            const blob = await new Promise<Blob | null>((resolve) => {
+                canvas.toBlob(resolve, 'image/jpeg', 0.8);
+            });
     
-                    const response = await fetch('/api/analyze-frame', {
-                        method: 'POST',
-                        body: formData,
-                    });
+            if (!blob) {
+                throw new Error('Failed to capture frame');
+            }
     
-                    const contentType = response.headers.get('content-type');
-                    if (!contentType || !contentType.includes('application/json')) {
-                        const text = await response.text();
-                        throw new Error(`Unexpected Response: ${text.substring(0, 100)}`);
-                    }
+            const formData = new FormData();
+            formData.append('frame', blob, 'frame.jpg');
+            formData.append('meetingId', meetingId);
+            formData.append('userId', userId);
     
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
-                        throw new Error(errorData.message || `Server returned ${response.status}`);
-                    }
-                    
-                    const result = await response.json();
-                    setLastResult(result);
-                    updateStatusFromResult(result);
-                    setFrameCount(prev => prev + 1);
-                } catch (err) {
-                    console.error('Analysis error:', err);
-                    setError(
-                        err instanceof Error 
-                            ? err.message 
-                            : typeof err === 'string' 
-                                ? err 
-                                : 'Analysis failed'
-                    );
-                } finally {
-                    setIsAnalyzing(false);
-                }
-            }, 'image/jpeg', 0.8); // JPEG at 80% quality
-        } catch (error) {
-            console.error('Capture error:', error);
-            setError('Frame capture failed');
+            const response = await fetch('/api/ai/process-frame', {
+                method: 'POST',
+                body: formData,
+            });
+    
+            clearTimeout(timeoutId);
+    
+            // Check content-type before parsing
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text();
+                throw new Error(`Unexpected response: ${text}`);
+            }
+    
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `Request failed with status ${response.status}`);
+            }
+    
+            const result = await response.json();
+            
+            // Validate response structure
+            if (typeof result.isAttentive !== 'boolean' || typeof result.faceDetected !== 'boolean') {
+                throw new Error('Invalid response format from server');
+            }
+    
+            setLastResult(result);
+            updateStatusFromResult(result);
+            setFrameCount(prev => prev + 1);
+            
+        } catch (err) {
+            console.error('Analysis error:', err);
+            setError(
+                err instanceof Error 
+                    ? err.message 
+                    : 'Analysis failed'
+            );
+            setStatus('Analysis failed');
+        } finally {
             setIsAnalyzing(false);
         }
     };
