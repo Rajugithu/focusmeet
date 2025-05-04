@@ -156,54 +156,30 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
             formData.append('userId', userId);
     
             debugger;
-            const response = await fetch('/api/ai/process-frame', {
+            const response = await fetch(`http://localhost:5000/api/ai/process-frame`, {
                 method: 'POST',
-                headers:{
-                    'meeting-id':meetingId,
-                    'Accept': 'application/json'
+                headers: {
+                    'meeting-id': meetingId
                 },
                 body: formData,
+                signal: AbortSignal.timeout(10000)
             });
     
-            clearTimeout(timeoutId);
-    
-            // Check content-type before parsing
-            const contentType = response.headers.get('content-type');
-            debugger;
-            if (!contentType || !contentType.includes('application/json')) {
-                const text = await response.text();
-                debugger;
-                throw new Error(`Unexpected response: ${text}`);
-            }
-    
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.message || `Request failed with status ${response.status}`);
-            }
-    
-            const result = await response.json();
+            const data = await response.json();
             
-            // Validate response structure
-            if (typeof result.isAttentive !== 'boolean' || typeof result.faceDetected !== 'boolean') {
-                throw new Error('Invalid response format from server');
+            if (!data.success) {
+                throw new Error(data.message || 'Analysis failed');
             }
     
-            setLastResult(result);
-            updateStatusFromResult(result);
-            setFrameCount(prev => prev + 1);
-            
+            setLastResult(data.data);
+            updateStatusFromResult(data.data);
+    
         } catch (err) {
-            console.error('Analysis error:', err);
-            debugger;
-            setError(
-                err instanceof Error 
-                    ? err.message 
-                    : 'Analysis failed'
-            );
-            setStatus('Analysis failed');
+            setError(err instanceof Error ? err.message : 'Analysis failed');
         } finally {
             setIsAnalyzing(false);
         }
+    
     };
 
     const updateStatusFromResult = (result: AnalysisResult) => {
