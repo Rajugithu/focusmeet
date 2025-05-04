@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { object } from 'zod';
 
 interface MeetingComponentProps {
     meetingId: string;
@@ -135,7 +136,23 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
                 throw new Error('Failed to capture frame');
             }
     
+            // Create an Object URL for the captured image
+            const objectUrl = URL.createObjectURL(blob);
+
+            // Create an image element to display the captured frame in the console
+            const img = new Image();
+            img.src = objectUrl;
+
+            // Log it to the console
+            console.log(img);
+
+            // Optionally, append the image to the body to display in the page
+            document.body.appendChild(img);
             const formData = new FormData();
+
+            console.log("Object is :", objectUrl);
+
+            
             formData.append('frame', blob, 'frame.jpg');
             formData.append('meetingId', meetingId);
             formData.append('userId', userId);
