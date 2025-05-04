@@ -108,9 +108,11 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
         if (isAnalyzing) return;
     
         try {
+            debugger;
             setIsAnalyzing(true);
             setStatus('Analyzing...');
             setError(null);
+            debugger;
             
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -150,15 +152,16 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
             document.body.appendChild(img);
             const formData = new FormData();
 
-            console.log("Object is :", objectUrl);
-
-            
             formData.append('frame', blob, 'frame.jpg');
-            formData.append('meetingId', meetingId);
             formData.append('userId', userId);
     
+            debugger;
             const response = await fetch('/api/ai/process-frame', {
                 method: 'POST',
+                headers:{
+                    'meeting-id':meetingId,
+                    'Accept': 'application/json'
+                },
                 body: formData,
             });
     
@@ -166,8 +169,10 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
     
             // Check content-type before parsing
             const contentType = response.headers.get('content-type');
+            debugger;
             if (!contentType || !contentType.includes('application/json')) {
                 const text = await response.text();
+                debugger;
                 throw new Error(`Unexpected response: ${text}`);
             }
     
@@ -189,6 +194,7 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
             
         } catch (err) {
             console.error('Analysis error:', err);
+            debugger;
             setError(
                 err instanceof Error 
                     ? err.message 
