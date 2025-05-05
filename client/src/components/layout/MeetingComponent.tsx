@@ -19,6 +19,7 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
     const [status, setStatus] = useState('Initializing...');
     const [error, setError] = useState<string | null>(null);
     const [frameCount, setFrameCount] = useState(0);
+    const lastApiCallRef = useRef<number>(0);
     const [lastResult, setLastResult] = useState<AnalysisResult | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const analysisIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -96,6 +97,13 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
         setIsAnalyzing(false);
     };
 
+    const displayFrameInConsole = (frameData: string) => {
+        console.log(`%cFRAME #${frameCount}`, 
+            'color: white; background: black; padding: 2px 5px; border-radius: 3px;');
+        
+        console.log('%c ', `font-size: 1px; padding: 100px 150px; background: url('data:image/jpeg;base64,${frameData}') no-repeat; background-size: contain;`);
+    };
+
     const captureAndAnalyzeFrame = async () => {
         const video = videoRef.current;
         const canvas = canvasRef.current;
@@ -108,12 +116,11 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
         if (isAnalyzing) return;
     
         try {
-            debugger;
+            const now = Date.now();
             setIsAnalyzing(true);
             setStatus('Analyzing...');
             setError(null);
-            debugger;
-            
+                        
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
     
@@ -137,42 +144,40 @@ const MeetingComponent: React.FC<MeetingComponentProps> = ({ meetingId, stream, 
             if (!blob) {
                 throw new Error('Failed to capture frame');
             }
-    
-            // Create an Object URL for the captured image
-            const objectUrl = URL.createObjectURL(blob);
 
-            // Create an image element to display the captured frame in the console
-            const img = new Image();
-            img.src = objectUrl;
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend=()=>{
+                const base64Data=reader.result?.toString().split(',')[1] || '';
+                displayFrameInConsole(base64Data);
+            }
 
-            // Log it to the console
-            console.log(img);
 
-            // Optionally, append the image to the body to display in the page
-            document.body.appendChild(img);
             const formData = new FormData();
 
             formData.append('frame', blob, 'frame.jpg');
-            formData.append('userId', userId);
-    
-            debugger;
+            //formData.append('userId', userId);
+
             const response = await fetch(`http://localhost:5000/api/ai/process-frame`, {
                 method: 'POST',
                 headers: {
                     'meeting-id': meetingId
                 },
                 body: formData,
-                signal: AbortSignal.timeout(10000)
+                //signal: AbortSignal.timeout(10000)
             });
-    
-            const data = await response.json();
-            
-            if (!data.success) {
-                throw new Error(data.message || 'Analysis failed');
+
+            console.log("current meeting id is : ", meetingId);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
             }
-    
-            setLastResult(data.data);
-            updateStatusFromResult(data.data);
+
+            const data = await response.json();
+            console.log("API response:", data);
+            setFrameCount(prev => prev + 1);
+            lastApiCallRef.current = now;
     
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Analysis failed');
