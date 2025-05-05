@@ -53,8 +53,11 @@ const StudentPage: React.FC = () => {
         setUserStream(mediaStream);
 
         // Join room with media stream
+        debugger;
         socket.emit('join-room', roomId, userId, (response?: JoinResponse) => {
+          console.log('Join response:', response);
           if (response?.success) {
+            console.log('Join successful');
             setHasJoined(true);
             debugger;
           } else {
