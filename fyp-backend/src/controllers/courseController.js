@@ -2,6 +2,7 @@ const Course = require('../models/course');
 
 // Create a new course
 exports.createCourse = async (req, res) => {
+  console.log('Create course API hit with body:', req.body);
   try {
     const course = new Course(req.body);
     await course.save();
@@ -10,6 +11,7 @@ exports.createCourse = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
 
 // Get all courses
 exports.getAllCourses = async (req, res) => {
