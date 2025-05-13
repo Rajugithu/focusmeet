@@ -1,79 +1,66 @@
-const Report = require('../models/report');
-const User = require('../models/User');
-const Lecture = require('../models/Lecture');
+const { saveReport, readReports } = require('../models/reportModel');
+const { Parser } = require('json2csv');
+const fs = require('fs');
+const path = require('path');
+const Report = require('../models/reportModel'); 
 
-// @desc   Generate a report based on engagement data
-// @route  POST /api/reports
-// @access Private (Teacher/Admin)
-exports.generateReport = async (req, res) => {
+const studentSockets = {}; // store student socket references
+
+function registerSocket(studentId, socket) {
+    studentSockets[studentId] = socket;
+}
+
+async function handleReport(req, res) {
+    const { studentId, status } = req.body;
+
+    if (!studentId || !status) {
+        return res.status(400).json({ error: 'Missing studentId or status' });
+    }
+
+    const timestamp = new Date().toISOString();
+    await saveReport({ timestamp, studentId, status });
+
+    // Notify if distracted
+    if (status === 'distracted' && studentSockets[studentId]) {
+        studentSockets[studentId].emit('distracted-alert', {
+            message: 'You seem distracted. Please pay attention.',
+        });
+    }
+
+    res.json({ success: true });
+}
+
+function getReport(req, res) {
+    const reports = readReports();
+    res.json(reports);
+}
+
+const exportReportsToCSV = async (req, res) => {
     try {
-        const { lectureId, studentId, engagementScore, remarks } = req.body;
+        const reports = await Report.find().lean(); // get plain JS objects
 
-        if (!lectureId || !studentId || engagementScore === undefined) {
-            return res.status(400).json({ message: "All required fields must be provided" });
+        if (reports.length === 0) {
+            return res.status(404).json({ message: 'No reports found' });
         }
 
-        const student = await User.findById(studentId);
-        if (!student) {
-            return res.status(404).json({ message: "Student not found" });
-        }
+        const fields = Object.keys(reports[0]);
+        const opts = { fields };
+        const parser = new Parser(opts);
+        const csv = parser.parse(reports);
 
-        const lecture = await Lecture.findById(lectureId);
-        if (!lecture) {
-            return res.status(404).json({ message: "Lecture not found" });
-        }
+        const filePath = path.join(__dirname, '../../exports/reports.csv');
 
-        const report = new Report({ lecture: lectureId, student: studentId, engagementScore, remarks });
-        const savedReport = await report.save();
+        // Create folder if not exists
+        fs.mkdirSync(path.dirname(filePath), { recursive: true });
 
-        res.status(201).json(savedReport);
+        fs.writeFileSync(filePath, csv);
+
+        res.download(filePath); // send the file to client
+
     } catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        console.error('CSV export error:', error);
+        res.status(500).json({ message: 'Failed to export reports' });
     }
 };
 
-// @desc   Get all reports (Admin/Teacher)
-// @route  GET /api/reports
-// @access Private
-exports.getAllReports = async (req, res) => {
-    try {
-        const reports = await Report.find().populate('student', 'name email').populate('lecture', 'title date');
-        res.status(200).json(reports);
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error });
-    }
-};
-
-// @desc   Get reports for a specific student
-// @route  GET /api/reports/student/:studentId
-// @access Private (Student/Teacher)
-exports.getStudentReports = async (req, res) => {
-    try {
-        const reports = await Report.find({ student: req.params.studentId }).populate('lecture', 'title date');
-
-        if (!reports.length) {
-            return res.status(404).json({ message: "No reports found for this student" });
-        }
-
-        res.status(200).json(reports);
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error });
-    }
-};
-
-// @desc   Delete a report
-// @route  DELETE /api/reports/:id
-// @access Private (Admin/Teacher)
-exports.deleteReport = async (req, res) => {
-    try {
-        const report = await Report.findById(req.params.id);
-        if (!report) {
-            return res.status(404).json({ message: "Report not found" });
-        }
-
-        await report.deleteOne();
-        res.status(200).json({ message: "Report deleted successfully" });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error });
-    }
-};
+module.exports = { handleReport, getReport, registerSocket, exportReportsToCSV }; // Ensure exportReportsToCSV is included
