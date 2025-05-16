@@ -1,0 +1,26 @@
+const Lecture = require('../models/lecture'); // Import Lecture Schema
+
+// End Lecture API
+exports.endLecture = async (req, res) => {
+    try {
+        const { lectureId } = req.params;
+
+        // Find the lecture by ID
+        const lecture = await Lecture.findById(lectureId);
+        if (!lecture) {
+            return res.status(404).json({ message: 'Lecture not found' });
+        }
+
+        // Check if the lecture is already ended
+        if (!lecture.isActive) {
+            return res.status(400).json({ message: 'Lecture is already ended' });
+        }
+
+        // End the lecture
+        await lecture.endLecture(); // Calls the schema method
+
+        res.status(200).json({ message: 'Lecture ended successfully', lecture });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
