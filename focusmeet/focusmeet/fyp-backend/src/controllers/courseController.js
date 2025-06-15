@@ -8,6 +8,7 @@ exports.createCourse = async (req, res) => {
     await course.save();
     res.status(201).json(course);
   } catch (err) {
+    console.error('Error creating course:', err); // Add this line
     res.status(400).json({ error: err.message });
   }
 };

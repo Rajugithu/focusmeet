@@ -13,11 +13,9 @@ const lectureRoutes = require("./src/routes/auth/lectureRoutes");
 const sessionRoutes = require("./src/routes/auth/sessionRoutes");
 const userRoutes = require("./src/routes/auth/userRoutes");
 const Signaling = require("./src/Signaling/Signaling");
-const courseRoutes = require("./src/routes/auth/courseRoutes");
 const reportRoutes = require("./src/routes/auth/reportRoutes");
 const { registerSocket } = require("./src/controllers/reportController");
 const responseRoutes = require("./src/routes/auth/responseRoutes");
-const { createRoutesFromElements } = require("react-router-dom");
 
 
 // Initialize Express App
@@ -94,7 +92,6 @@ app.use("/api/sessions", sessionRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/meetings", meetingRoutes);
 app.use("/api/reports", reportRoutes);
-app.use("/api/courses", courseRoutes);
 app.use('/api/ai', responseRoutes(io, distractedStudents, userMeetingMap));
 
 
